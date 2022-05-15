@@ -1,0 +1,53 @@
+local mod = {}
+
+mod.spec = {
+  { "folke/tokyonight.nvim" },
+
+  { "kyazdani42/nvim-web-devicons" },
+
+  { "numToStr/Comment.nvim" },
+
+  { "tpope/vim-eunuch" },
+
+  { "tpope/vim-sensible" },
+
+  { "tpope/vim-sleuth" },
+
+  { "tpope/vim-surround" },
+
+  { "windwp/nvim-autopairs" },
+
+  { "nvim-lualine/lualine.nvim" },
+}
+
+mod.config = function()
+  local opt = vim.opt
+
+  opt.pumheight = 10
+  opt.completeopt = "menu,noinsert"
+
+  opt.expandtab = true
+  opt.shiftwidth = 2
+  opt.smarttab = true
+  opt.tabstop = 2
+
+  opt.ignorecase = true
+  opt.smartcase = true
+
+  opt.number = true
+
+  vim.g.tokyonight_style = "night"
+  vim.cmd[[colo tokyonight]]
+
+  require("Comment").setup({})
+
+  require("nvim-autopairs").setup()
+
+  require("lualine").setup({
+    options = {
+      theme = "tokyonight"
+    }
+  })
+end
+
+return mod
