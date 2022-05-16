@@ -27,10 +27,15 @@ local function configure_lua()
 end
 
 nf.setup(function()
-
   NF_INTELLISENSE = {
-    treesitter_modules = { "lua" },
-    lsp_servers = { "sumneko_lua" },
+    treesitter_modules = { "lua", "typescript", "c_sharp", "php", "json", "html" },
+    lsp_servers = { "sumneko_lua", "tsserver", "omnisharp", "intelephense", "phpactor", "jsonls", "angularls" },
     sumneko_lua = configure_lua(),
+    tsserver = {},
+    omnisharp = {},
+    intelephense = {},
+    phpactor = {},
+    jsonls = {},
+    angularls = {}
   }
 end)
