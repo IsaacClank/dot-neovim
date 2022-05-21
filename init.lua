@@ -28,14 +28,17 @@ end
 
 nf.setup(function()
   NF_INTELLISENSE = {
-    treesitter_modules = { "lua", "typescript", "c_sharp", "php", "json", "html" },
-    lsp_servers = { "sumneko_lua", "tsserver", "omnisharp", "intelephense", "phpactor", "jsonls", "angularls" },
+    treesitter_modules = { "lua", "typescript", "tsx", "c_sharp", "php", "json", "html" },
+    lsp_servers = { "sumneko_lua", "tsserver", "omnisharp", "intelephense", "phpactor", "jsonls", "angularls", "eslint", "cssls", "cssmodules_ls" },
     sumneko_lua = configure_lua(),
     tsserver = {},
     omnisharp = {},
     intelephense = {},
     phpactor = {},
     jsonls = {},
-    angularls = {}
+    angularls = {},
+    eslint = {},
+    cssls = {},
+    cssmodule_ls = {}
   }
 end)
