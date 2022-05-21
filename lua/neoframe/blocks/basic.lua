@@ -26,9 +26,7 @@ mod.config = function()
   opt.pumheight = 10
   opt.completeopt = "menu,noinsert"
 
-  opt.expandtab = true
   opt.shiftwidth = 2
-  opt.smarttab = true
   opt.tabstop = 2
 
   opt.ignorecase = true
