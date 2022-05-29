@@ -23,6 +23,7 @@ mod.spec = {
 mod.config = function()
   local opt = vim.opt
 
+  opt.expandtab = true
   opt.pumheight = 10
   opt.completeopt = "menu,noinsert"
 

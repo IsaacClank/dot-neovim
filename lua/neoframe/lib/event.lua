@@ -5,6 +5,7 @@ local mod = {}
 
 mod.EVENT_USER = "User"
 mod.EVENT_VIM_ENTER = "VimEnter"
+mod.EVENT_BUF_ENTER = "BufEnter"
 
 ---Register an event listener
 --@see `:h autocmd`

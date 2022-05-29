@@ -1,4 +1,5 @@
 local nf = require('neoframe')
+local nf_event = require('neoframe.lib.event')
 
 local function configure_lua()
   local runtime_path = vim.split(package.path, ';')
@@ -54,5 +55,17 @@ nf.setup(function()
       })
     end
   });
+
+  nf.blocks.add({
+    spec = { "ggandor/lightspeed.nvim", requires = "tpope/vim-repeat" },
+  })
+
+  nf.blocks.add({
+    config = function()
+      nf_event.on(nf_event.EVENT_BUF_ENTER, function()
+        vim.opt.expandtab = false
+      end, { pattern = "*.php" })
+    end
+  })
 
 end)
