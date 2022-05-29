@@ -41,6 +41,22 @@ M.setup = function()
       t({ "{", "}" })
     })
   })
+
+  ls.add_snippets("php", {
+    s("field", {
+      t({ "/**", "" }),
+      t({ " * " }), i(4, "Description"), t({ "", "" }),
+      t({ " */", "" }),
+      i(1, "public"), t({ " " }), i(2, "string"), t({ " $" }), i(3, "field"), t({ ";" })
+    }),
+
+    s("func", {
+      t({ "/**", "" }),
+      t({ " * " }), i(4, "Description"), t({ "", "" }),
+      t({ " */", "" }),
+      i(1, "public"), t({ " function " }), i(2, "functionName"), t({ "(" }), i(3, "parameters"), t({ "){}" })
+    })
+  })
 end
 
 return M

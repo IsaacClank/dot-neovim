@@ -34,7 +34,7 @@ mod.config = function()
 
   opt.number = true
 
-  vim.g.tokyonight_style = "night"
+  -- vim.g.tokyonight_style = "night"
   vim.cmd[[colo tokyonight]]
 
   require("Comment").setup({})
