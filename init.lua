@@ -33,7 +33,6 @@ nf.setup(function()
 
     angularls = {},
     cssls = {},
-    cssls = {},
     cssmodules_ls = {},
     eslint = {},
     intelephense = {},
