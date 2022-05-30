@@ -27,6 +27,15 @@ local function configure_lua()
   }
 end
 
+local function configure_omnisharp()
+  local pid = vim.fn.getpid()
+  local omnisharp_bin = "/home/tpht/.local/share/nvim/lsp_servers/omnisharp/omnisharp/OmniSharp"
+
+  return {
+    cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) }
+  }
+end
+
 nf.setup(function()
   NF_INTELLISENSE = {
     treesitter_modules = { "lua", "typescript", "tsx", "c_sharp", "php", "json", "html", "scss", "yaml" },
@@ -38,7 +47,7 @@ nf.setup(function()
     eslint = {},
     intelephense = {},
     jsonls = {},
-    omnisharp = {},
+    omnisharp = configure_omnisharp(),
     phpactor = {},
     sumneko_lua = configure_lua(),
     tsserver = {},

@@ -18,6 +18,8 @@ mod.spec = {
   { "windwp/nvim-autopairs" },
 
   { "nvim-lualine/lualine.nvim" },
+
+  { "jghauser/mkdir.nvim" },
 }
 
 mod.config = function()

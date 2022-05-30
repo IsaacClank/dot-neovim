@@ -8,7 +8,7 @@ function M.setup()
   )
 
   lsp_installer.setup({
-    ensure_installed = NF_INTELLISENSE.lsp_servers,
+    automatic_installation = true,
   })
 
   for _, server in pairs(NF_INTELLISENSE.lsp_servers) do
