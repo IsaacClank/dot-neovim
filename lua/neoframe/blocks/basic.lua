@@ -35,20 +35,21 @@ mod.config = function()
   opt.ignorecase = true
   opt.smartcase = true
 
-  opt.number = true
+  if vim.fn["exists"]("g:vscode") == 0 then
+    opt.number = true
 
-  -- vim.g.tokyonight_style = "night"
-  vim.cmd[[colo tokyonight]]
+    vim.cmd [[colo tokyonight]]
 
-  require("Comment").setup({})
+    require("Comment").setup({})
 
-  require("nvim-autopairs").setup()
+    require("nvim-autopairs").setup()
 
-  require("lualine").setup({
-    options = {
-      theme = "tokyonight"
-    }
-  })
+    require("lualine").setup({
+      options = {
+        theme = "tokyonight"
+      }
+    })
+  end
 end
 
 return mod

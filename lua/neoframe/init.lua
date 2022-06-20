@@ -13,9 +13,12 @@ M.blocks = require("neoframe.blocks")
 function M.setup(arg)
   M.blocks.add(require("neoframe.blocks.core"))
   M.blocks.add(require("neoframe.blocks.basic"))
-  -- M.blocks.add(require("neoframe.blocks.git"))
-  -- M.blocks.add(require("neoframe.blocks.telescope"))
-  -- M.blocks.add(require("neoframe.blocks.intellisense"))
+
+  if vim.fn['exists']("g:vscode") == 0 then
+    M.blocks.add(require("neoframe.blocks.git"))
+    M.blocks.add(require("neoframe.blocks.telescope"))
+    M.blocks.add(require("neoframe.blocks.intellisense"))
+  end
 
   require("neoframe.globals")
   box(arg):is_a("function"):open()()
