@@ -35,6 +35,8 @@ mod.config = function()
   opt.ignorecase = true
   opt.smartcase = true
 
+  opt.fileformat = "unix"
+
   if vim.fn["exists"]("g:vscode") == 0 then
     opt.number = true
 

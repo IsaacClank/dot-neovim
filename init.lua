@@ -39,7 +39,8 @@ end
 nf.setup(function()
   NF_INTELLISENSE = {
     treesitter_modules = { "lua", "typescript", "tsx", "c_sharp", "php", "json", "html", "scss", "yaml", "markdown" },
-    lsp_servers = { "sumneko_lua", "tsserver", "omnisharp", "intelephense", "phpactor", "jsonls", "angularls", "eslint", "cssls", "cssmodules_ls", "yamlls", "html" },
+    lsp_servers = { "sumneko_lua", "tsserver", "omnisharp", "intelephense", "phpactor", "jsonls", "angularls", "eslint",
+      "cssls", "cssmodules_ls", "yamlls", "html" },
 
     angularls = {},
     cssls = {},
@@ -71,11 +72,10 @@ nf.setup(function()
   })
 
   nf.blocks.add({
-    -- config = function()
-    --   nf_event.on(nf_event.EVENT_BUF_ENTER, function()
-    --     vim.opt.expandtab = false
-    --   end, { pattern = "*.php" })
-    -- end
+    config = function()
+      nf_event.on(nf_event.EVENT_BUF_ENTER, function()
+        vim.opt.expandtab = false
+      end, { pattern = "*.php" })
+    end
   })
-
 end)
