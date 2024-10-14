@@ -389,8 +389,13 @@ require("lazy").setup({
           formatters_by_ft = {
             typescript = { "prettier" },
             prisma = { "prisma" },
-            ["_"] = { lsp_format = "fallback" },
           },
+          default_format_opts = {
+            lsp_format = "fallback",
+          },
+          -- format_on_save = {
+          --   lsp_format = "fallback",
+          -- },
           formatters = {
             prisma = {
               command = "npx",
