@@ -85,6 +85,11 @@ require("lazy").setup({
     }
   },
   {
+    "windwp/nvim-ts-autotag",
+    enabled = vim.g.vscode ~= 1,
+    opts = {}
+  },
+  {
     "ggandor/leap.nvim",
     branch = "main",
     opts = {},
