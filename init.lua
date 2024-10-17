@@ -261,6 +261,18 @@ require("lazy").setup({
       local lspconfig = require("lspconfig")
       local completion_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+      lspconfig.cssls.setup({
+        capabilities = completion_capabilities,
+        settings = {
+          css = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore"
+            }
+          }
+        }
+      })
+
       lspconfig.dockerls.setup({
         capabilities = completion_capabilities,
         filetypes = { "dockerfile" },
@@ -322,6 +334,10 @@ require("lazy").setup({
       })
 
       lspconfig.prismals.setup({
+        capabilities = completion_capabilities,
+      })
+
+      lspconfig.tailwindcss.setup({
         capabilities = completion_capabilities,
       })
 
