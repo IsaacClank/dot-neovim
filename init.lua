@@ -131,6 +131,7 @@ require("lazy").setup({
   },
   {
     "folke/noice.nvim",
+    enabled = vim.g.vscode ~= 1,
     opts = {
       lsp = {
         override = {
