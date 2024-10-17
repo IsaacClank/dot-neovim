@@ -98,7 +98,6 @@ require("lazy").setup({
     tag = "v1.7.1",
     enabled = vim.g.vscode ~= 1,
     opts = {
-      sync_root_with_cwd = true,
       view = { width = "15%", },
     },
     keys = {
