@@ -403,7 +403,9 @@ require("lazy").setup({
         },
         opts = {
           formatters_by_ft = {
+            css = { "prettier" },
             typescript = { "prettier" },
+            typescriptreact = { "prettier" },
             prisma = { "prisma" },
           },
           default_format_opts = {
