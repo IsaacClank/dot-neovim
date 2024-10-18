@@ -102,6 +102,7 @@ require("lazy").setup({
     "nvim-tree/nvim-tree.lua",
     tag = "v1.7.1",
     enabled = vim.g.vscode ~= 1,
+    lazy = false,
     opts = {
       view = { width = "15%", },
     },
