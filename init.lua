@@ -109,6 +109,7 @@ require("lazy").setup({
     },
     keys = {
       { "<leader>ee", "<cmd>NvimTreeToggle<cr>",         desc = "Open" },
+      { "<leader>ef", "<cmd>NvimTreeFindFileToggle<cr>", desc = "Open at focused file" },
     },
   },
   -- PLUGIN__ESSENTIALS
