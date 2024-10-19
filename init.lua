@@ -49,11 +49,12 @@ require("lazy").setup({
       })
 
       wk.add({
+        { "<leader>e",  group = "Explorer" },
         { "<leader>g",  group = "Git" },
-        { "<leader>gd", group = "Diff" },
-        { "<leader>gr", group = "Reset" },
-        { "<leader>gs", group = "Stage" },
-        { "<leader>gu", group = "Unstage" },
+        { "<leader>gd", group = "Git Diff" },
+        { "<leader>gr", group = "Git Reset" },
+        { "<leader>gs", group = "Git Stage" },
+        { "<leader>gu", group = "Git Unstage" },
         { "<leader>l",  group = "Intellisense" },
         { "<leader>s",  group = "Navigation" },
 
@@ -107,7 +108,7 @@ require("lazy").setup({
       view = { width = "15%", },
     },
     keys = {
-      { "<leader>e", "<cmd>NvimTreeToggle<cr>", desc = "Explorer" },
+      { "<leader>ee", "<cmd>NvimTreeToggle<cr>",         desc = "Open" },
     },
   },
   -- PLUGIN__ESSENTIALS
