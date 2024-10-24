@@ -413,6 +413,7 @@ require("lazy").setup({
           formatters_by_ft = {
             css = { "prettier" },
             typescript = { "prettier" },
+            javascript = { "prettier" },
             typescriptreact = { "prettier" },
             prisma = { "prisma" },
           },
