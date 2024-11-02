@@ -132,7 +132,24 @@ require("lazy").setup({
     "nvim-lualine/lualine.nvim",
     branch = "master",
     enabled = vim.g.vscode ~= 1,
-    opts = {},
+    opts = {
+      sections = {
+        lualine_c = {
+          {
+            'filename',
+            path = 1
+          }
+        }
+      },
+      inactive_sections = {
+        lualine_c = {
+          {
+            'filename',
+            path = 1
+          }
+        }
+      }
+    },
     dependencies = {
       "nvim-tree/nvim-web-devicons"
     }
