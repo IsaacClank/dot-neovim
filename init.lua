@@ -135,23 +135,19 @@ require("lazy").setup({
     opts = {
       sections = {
         lualine_c = {
-          {
-            'filename',
-            path = 1
-          }
-        }
+          { 'filename',       path = 1 },
+          { 'macro_recording' }
+        },
       },
       inactive_sections = {
         lualine_c = {
-          {
-            'filename',
-            path = 1
-          }
+          { 'filename', path = 1 }
         }
       }
     },
     dependencies = {
-      "nvim-tree/nvim-web-devicons"
+      "nvim-tree/nvim-web-devicons",
+      "yavorski/lualine-macro-recording.nvim",
     }
   },
   {
