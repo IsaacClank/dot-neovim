@@ -311,6 +311,10 @@ require("lazy").setup({
         ),
       })
 
+      lspconfig.html.setup {
+        capabilities = completion_capabilities,
+      }
+
       lspconfig.jsonls.setup({
         capabilities = completion_capabilities,
       })
@@ -429,6 +433,7 @@ require("lazy").setup({
             javascript = { "prettier" },
             typescriptreact = { "prettier" },
             prisma = { "prisma" },
+            html = { "prettier" }
           },
           default_format_opts = {
             lsp_format = "fallback",
