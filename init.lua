@@ -379,6 +379,11 @@ require("lazy").setup({
         capabilities = completion_capabilities,
       })
 
+      lspconfig.rust_analyzer.setup({
+        capabilities = completion_capabilities,
+        settings = {}
+      })
+
       lspconfig.tailwindcss.setup({
         capabilities = completion_capabilities,
       })
@@ -446,18 +451,19 @@ require("lazy").setup({
         opts = {
           formatters_by_ft = {
             css = { "prettier" },
-            typescript = { "prettier" },
+            html = { "prettier" },
             javascript = { "prettier" },
-            typescriptreact = { "prettier" },
             prisma = { "prisma" },
-            html = { "prettier" }
+            rust = { "rustfmt " },
+            typescript = { "prettier" },
+            typescriptreact = { "prettier" },
           },
           default_format_opts = {
             lsp_format = "fallback",
           },
-          -- format_on_save = {
-          --   lsp_format = "fallback",
-          -- },
+          format_on_save = {
+            lsp_format = "fallback",
+          },
           formatters = {
             prisma = {
               command = "npx",
