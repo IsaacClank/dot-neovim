@@ -105,7 +105,12 @@ require("lazy").setup({
     enabled = vim.g.vscode ~= 1,
     lazy = false,
     opts = {
-      view = { width = "15%", },
+      view = {
+        preserve_window_proportions = true,
+        float = {
+          enable = true
+        }
+      },
     },
     keys = {
       { "<leader>ee", "<cmd>NvimTreeToggle<cr>",         desc = "Open" },
