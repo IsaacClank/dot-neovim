@@ -1,5 +1,24 @@
+-- BOOTSTRAP
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out,                            "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+-- /BOOTSTRAP
+
 -- COMMON
 vim.g.mapleader = " " -- Set leader to <Space>. Should already be set by mini.nvim.basics.
+vim.g.maplocalleader = "\\"
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -8,29 +27,17 @@ vim.opt.expandtab = true -- In insert mode, expand tabs into spaces.
 vim.opt.scrolloff = 10   -- Minimum lines offset on top and bottom. Used to add padding.
 vim.opt.shiftwidth = 2   -- Number of spaces used for auto-indent.
 vim.opt.tabstop = 2      -- Number of spaces to render tabs in a file. This does **not** modify the file.
--- COMMON
+
+-- /COMMON
 
 -- FILE_ASSOCIATION
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   pattern = "*compose.yml",
   command = "set filetype=yaml.docker-compose",
 })
--- FILE_ASSOCIATION
+-- /FILE_ASSOCIATION
 
 -- PLUGIN
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
 require("lazy").setup({
   -- PLUGIN__ESSENTIALS
   {
@@ -117,7 +124,7 @@ require("lazy").setup({
       { "<leader>ef", "<cmd>NvimTreeFindFileToggle<cr>", desc = "Open at focused file" },
     },
   },
-  -- PLUGIN__ESSENTIALS
+  -- /PLUGIN__ESSENTIALS
 
   -- PLUGINS__THEME
   {
@@ -175,7 +182,8 @@ require("lazy").setup({
       },
     },
     dependencies = {
-      "MunifTanjim/nui.nvim"
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
     }
   },
   {
@@ -204,7 +212,7 @@ require("lazy").setup({
       on_clear = function() end,
     }
   },
-  -- PLUGINS__THEME
+  -- /PLUGINS__THEME
 
   -- PLUGINS__GIT
   {
@@ -245,7 +253,7 @@ require("lazy").setup({
       { "<leader>gdc", "<cmd>DiffviewClose<cr>",       desc = "Close" },
     },
   },
-  -- PLUGINS__GIT
+  -- /PLUGINS__GIT
 
   -- PLUGINS__NAVIGATION
   {
@@ -264,7 +272,7 @@ require("lazy").setup({
       { "<leader>sg", "<cmd>Telescope live_grep<cr>",              desc = "Text" },
     },
   },
-  -- PLUGINS__NAVIGATION
+  -- /PLUGINS__NAVIGATION
 
   -- PLUGINS__INTELLISENSE
   {
@@ -283,6 +291,8 @@ require("lazy").setup({
   },
   {
     "neovim/nvim-lspconfig",
+    lazy = false,
+    ft = { 'lua', 'typescript' },
     keys = {
       { "<leader>la", function() vim.lsp.buf.code_action() end,           desc = "Code Action", },
       { "<leader>ld", function() vim.lsp.buf.definition() end,            desc = "Definition", },
@@ -297,70 +307,48 @@ require("lazy").setup({
     enabled = vim.g.vscode ~= 1,
     config = function()
       local lspconfig = require("lspconfig")
-      local completion_capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-      lspconfig.cssls.setup({
-        capabilities = completion_capabilities,
-        settings = {
-          css = {
-            validate = true,
-            lint = {
-              unknownAtRules = "ignore"
-            }
-          }
-        }
-      })
-
-      lspconfig.dockerls.setup({
-        capabilities = completion_capabilities,
-        filetypes = { "dockerfile" },
-      })
-
-      lspconfig.docker_compose_language_service.setup({
-        capabilities = completion_capabilities,
-        filetypes = { "yaml.docker-compose" },
-        single_file_support = true,
-        root_dir = lspconfig.util.root_pattern(
-          "docker-compose.yaml",
-          "docker-compose.yml",
-          "compose.yaml",
-          "compose.yml"
-        ),
-      })
-
-      lspconfig.html.setup {
-        capabilities = completion_capabilities,
-      }
-
-      lspconfig.jsonls.setup({
-        capabilities = completion_capabilities,
-      })
-
-      lspconfig.lua_ls.setup({
+      vim.lsp.config('lua_ls', {
         on_init = function(client)
-          client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+          if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if
+                path ~= vim.fn.stdpath('config')
+                and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+            then
+              return
+            end
+          end
+
+          client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
             runtime = {
-              version = "LuaJIT",
+              version = 'LuaJIT',
+              path = {
+                'lua/?.lua',
+                'lua/?/init.lua',
+              },
             },
             workspace = {
               checkThirdParty = false,
               library = {
                 vim.env.VIMRUNTIME,
-                "${3rd}/luv/library",
-              },
-            },
+                '${3rd}/luv/library',
+                '${3rd}/busted/library',
+              }
+              -- Or pull in all of 'runtimepath'.
+              -- library = {
+              --   vim.api.nvim_get_runtime_file('', true),
+              -- }
+            }
           })
         end,
         settings = {
-          Lua = {},
-        },
+          Lua = {}
+        }
       })
 
-      lspconfig.omnisharp.setup({
+      vim.lsp.config('omnisharp', {
         cmd = { "/home/isaac/.local/share/nvim/mason/packages/omnisharp/omnisharp" },
-        capabilities = completion_capabilities,
         root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", "function.json"),
-        filetypes = { "cs" },
         settings = {
           msbuild = {
             enabled = true,
@@ -375,76 +363,52 @@ require("lazy").setup({
         },
       })
 
-      lspconfig.prismals.setup({
-        capabilities = completion_capabilities,
+      vim.lsp.config('ts_ls', {
+        settings = {
+
+        }
       })
 
-      lspconfig.rust_analyzer.setup({
-        capabilities = completion_capabilities,
-        settings = {}
+      -- vim.lsp.enable('cssls');
+      -- vim.lsp.enable('docker_compose_language_service');
+      -- vim.lsp.enable('dockerls');
+      -- vim.lsp.enable('html');
+      vim.lsp.enable('jsonls');
+      vim.lsp.enable('lua_ls');
+      -- vim.lsp.enable('omnisharp')
+      -- vim.lsp.enable('prismals');
+      -- vim.lsp.enable('rust_analyzer');
+      -- vim.lsp.enable('tailwindcss');
+      vim.lsp.enable('ts_ls');
+
+      vim.cmd [[set completeopt+=fuzzy,menuone,noselect,popup,preview]]
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+          -- if client:supports_method('textDocument/implementation') then
+          -- end
+
+          if client:supports_method('textDocument/completion') then
+            -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+            local chars = {};
+            for i = 32, 126 do table.insert(chars, string.char(i)) end
+            client.server_capabilities.completionProvider.triggerCharacters = chars
+            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+
+            vim.keymap.set('i', '<c-space>', function()
+              vim.lsp.completion.get()
+            end)
+          end
+        end,
       })
 
-      lspconfig.tailwindcss.setup({
-        capabilities = completion_capabilities,
-      })
-
-      lspconfig.ts_ls.setup({
-        capabilities = completion_capabilities,
-      })
+      vim.lsp.inlay_hint.enable(not (vim.lsp.inlay_hint.is_enabled()))
     end,
 
     dependencies = {
       {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-          -- "hrsh7th/cmp-nvim-lsp-signature-help",
-          "hrsh7th/cmp-nvim-lsp",
-          "hrsh7th/cmp-buffer",
-          "hrsh7th/cmp-path",
-          "hrsh7th/cmp-cmdline",
-          "hrsh7th/cmp-vsnip",
-          "hrsh7th/vim-vsnip",
-          "lukas-reineke/cmp-under-comparator",
-        },
-        config = function()
-          local cmp = require("cmp")
-
-          cmp.setup({
-            snippet = {
-              expand = function(args)
-                vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-              end,
-            },
-            mapping = cmp.mapping.preset.insert({
-              ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-              ["<C-f>"] = cmp.mapping.scroll_docs(4),
-              ["<C-Space>"] = cmp.mapping.complete(),
-              ["<C-e>"] = cmp.mapping.abort(),
-              ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-            }),
-            sources = cmp.config.sources({
-              { name = "vsnip" },
-              -- { name = "nvim_lsp_signature_help" },
-              { name = "nvim_lsp" },
-              { { name = "buffer" } },
-            }),
-            sorting = {
-              comparators = {
-                cmp.config.compare.offset,
-                cmp.config.compare.exact,
-                cmp.config.compare.score,
-                require "cmp-under-comparator".under,
-                cmp.config.compare.kind,
-                cmp.config.compare.sort_text,
-                cmp.config.compare.length,
-                cmp.config.compare.order,
-              }
-            }
-          })
-        end
-      },
-      {
         "stevearc/conform.nvim",
+        lazy = false,
         keys = {
           { "<leader>lf", function() require("conform").format() end, desc = "Format" },
         },
@@ -482,12 +446,9 @@ require("lazy").setup({
   {
     "williamboman/mason.nvim",
     enabled = vim.g.vscode ~= 1,
-    build = ":MasonUpdate",
     opts = {},
-    dependencies = {
-      { "williamboman/mason-lspconfig.nvim", opts = {} },
-    },
+    dependencies = {},
   },
-  -- PLUGINS__INTELLISENSE
+  -- /PLUGINS__INTELLISENSE
 })
--- PLUGIN
+-- /PLUGIN
