@@ -173,11 +173,19 @@ require("lazy").setup({
           ["cmp.entry.get_documentation"] = true,
         },
       },
+      messages = {
+        enabled = true,              -- enables the Noice messages UI
+        view = "mini",
+        view_error = "mini",         -- view for errors
+        view_warn = "mini",          -- view for warnings
+        view_history = "messages",   -- view for :messages
+        view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
+      },
       presets = {
         bottom_search = true,
         command_palette = true,
         long_message_to_split = true,
-        inc_rename = true,
+        inc_rename = false,
         lsp_doc_border = true,
       },
     },
