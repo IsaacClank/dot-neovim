@@ -305,7 +305,6 @@ require("lazy").setup({
     },
     enabled = vim.g.vscode ~= 1,
     config = function()
-      local lspconfig = require("lspconfig")
       vim.lsp.config('lua_ls', {
         on_init = function(client)
           if client.workspace_folders then
@@ -333,10 +332,6 @@ require("lazy").setup({
                 '${3rd}/luv/library',
                 '${3rd}/busted/library',
               }
-              -- Or pull in all of 'runtimepath'.
-              -- library = {
-              --   vim.api.nvim_get_runtime_file('', true),
-              -- }
             }
           })
         end,
@@ -347,9 +342,8 @@ require("lazy").setup({
 
       vim.lsp.config('omnisharp', {
         cmd = { "/home/isaac/.local/share/nvim/mason/packages/omnisharp/omnisharp" },
-        root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", "function.json"),
         settings = {
-          msbuild = {
+          MsBuild = {
             enabled = true,
           },
           FormattingOptions = {
@@ -360,12 +354,6 @@ require("lazy").setup({
             EnableImportCompletion = true,
           },
         },
-      })
-
-      vim.lsp.config('ts_ls', {
-        settings = {
-
-        }
       })
 
       -- vim.lsp.enable('cssls');
@@ -379,28 +367,35 @@ require("lazy").setup({
       -- vim.lsp.enable('rust_analyzer');
       -- vim.lsp.enable('tailwindcss');
       vim.lsp.enable('ts_ls');
-
-      vim.cmd [[set completeopt=fuzzy,menuone,noselect,popup]]
-      vim.api.nvim_create_autocmd('LspAttach', {
-        callback = function(args)
-          local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-          -- if client:supports_method('textDocument/implementation') then
-          -- end
-
-          if client:supports_method('textDocument/completion') then
-            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-
-            vim.keymap.set('i', '<c-space>', function()
-              vim.lsp.completion.get()
-            end)
-          end
-        end,
-      })
-
-      vim.lsp.inlay_hint.enable(not (vim.lsp.inlay_hint.is_enabled()))
     end,
 
     dependencies = {
+      {
+        'saghen/blink.cmp',
+        version = '1.*',
+        opts = {
+          cmdline = {
+            enabled = false
+          },
+          completion = {
+            list = {
+              selection = {
+                preselect = false,
+                auto_insert = true,
+              }
+            },
+            documentation = {
+              auto_show = true,
+              window = {
+                border = 'single'
+              }
+            }
+          },
+          fuzzy = {
+            implementation = "prefer_rust"
+          }
+        }
+      },
       {
         "stevearc/conform.nvim",
         lazy = false,
