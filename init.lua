@@ -42,20 +42,22 @@ require("lazy").setup({
   -- PLUGIN__ESSENTIALS
   {
     "folke/which-key.nvim",
-    tag = "v3.13.3",
+    tag = "v3.17.0",
     event = "VeryLazy",
     enabled = vim.g.vscode ~= 1,
-    config = function()
-      local wk = require("which-key")
-
-      wk.setup({
-        icons = {
-          mappings = false
-        },
-        preset = "helix",
-      })
-
-      wk.add({
+    -- keys = {
+    --   {
+    --     "<leader>?",
+    --     function()
+    --       require('which-key').show()
+    --     end,
+    --     desc = 'All key mapping'
+    --   }
+    -- },
+    opts = {
+      preset = 'helix',
+      icons = { mappings = false },
+      spec = {
         { "<leader>e",  group = "Explorer" },
         { "<leader>g",  group = "Git" },
         { "<leader>gd", group = "Git Diff" },
@@ -64,13 +66,12 @@ require("lazy").setup({
         { "<leader>gu", group = "Git Unstage" },
         { "<leader>l",  group = "Intellisense" },
         { "<leader>s",  group = "Navigation" },
-
         { "<M-Up>",     "<cmd>resize +5<cr>",          desc = "Increase height" },
         { "<M-Down>",   "<cmd>resize -5<cr>",          desc = "Decrease height" },
         { "<M-Right>",  "<cmd>vertical resize +5<cr>", desc = "Increase width" },
         { "<M-Left>",   "<cmd>vertical resize -5<cr>", desc = "Decrease width" },
-      })
-    end
+      },
+    },
   },
   { "echasnovski/mini.basics", branch = "main", opts = {} },
   { "echasnovski/mini.pairs",  branch = "main", opts = {} },
@@ -108,12 +109,11 @@ require("lazy").setup({
   },
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.7.1",
+    tag = "v1.12.0",
     enabled = vim.g.vscode ~= 1,
     lazy = false,
     opts = {
       view = {
-        preserve_window_proportions = true,
         float = {
           enable = true
         }
@@ -170,7 +170,6 @@ require("lazy").setup({
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
         },
       },
       messages = {
@@ -180,6 +179,10 @@ require("lazy").setup({
         view_warn = "mini",          -- view for warnings
         view_history = "messages",   -- view for :messages
         view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
+      },
+      notify = {
+        enabled = true,
+        view = "mini",
       },
       presets = {
         bottom_search = true,
@@ -202,23 +205,10 @@ require("lazy").setup({
   {
     "xiyaowong/transparent.nvim",
     enabled = vim.g.vscode ~= 1,
-    opts = {
-      -- table: default groups
-      groups = {
-        'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
-        'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
-        'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
-        'SignColumn', 'CursorLine', 'CursorLineNr', 'StatusLine', 'StatusLineNC',
-        'EndOfBuffer',
-      },
-      -- table: additional groups that should be cleared
-      extra_groups = {},
-      -- table: groups you don't want to clear
-      exclude_groups = {},
-      -- function: code to be executed after highlight groups are cleared
-      -- Also the user event "TransparentClear" will be triggered
-      on_clear = function() end,
-    }
+    lazy = false,
+    config = function()
+      vim.cmd('TransparentEnable')
+    end
   },
   -- /PLUGINS__THEME
 
@@ -241,6 +231,7 @@ require("lazy").setup({
     },
     lazy = false,
     keys = {
+      { "<leader>g",   group = "Git" },
       { "<leader>gn",  "<cmd>Gitsigns next_hunk<cr>",          desc = "Next hunk" },
       { "<leader>gp",  "<cmd>Gitsigns prev_hunk<cr>",          desc = "Previous hunk" },
       { "<leader>gsa", "<cmd>Gitsigns stage_buffer<cr>",       desc = "Stage file" },
@@ -276,7 +267,7 @@ require("lazy").setup({
     },
     keys = {
       { "<leader>sf", "<cmd>Telescope find_files<cr>",             desc = "File browser" },
-      { "<leader>sF", "<cmd>Telescope find_files hidden=true<cr>", desc = "File browser" },
+      { "<leader>sF", "<cmd>Telescope find_files hidden=true<cr>", desc = "File browser - Include hidden files" },
       { "<leader>sg", "<cmd>Telescope live_grep<cr>",              desc = "Text" },
     },
   },
@@ -389,7 +380,7 @@ require("lazy").setup({
       -- vim.lsp.enable('tailwindcss');
       vim.lsp.enable('ts_ls');
 
-      vim.cmd [[set completeopt+=fuzzy,menuone,noselect,popup,preview]]
+      vim.cmd [[set completeopt=fuzzy,menuone,noselect,popup]]
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
@@ -397,10 +388,6 @@ require("lazy").setup({
           -- end
 
           if client:supports_method('textDocument/completion') then
-            -- Optional: trigger autocompletion on EVERY keypress. May be slow!
-            local chars = {};
-            for i = 32, 126 do table.insert(chars, string.char(i)) end
-            client.server_capabilities.completionProvider.triggerCharacters = chars
             vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
 
             vim.keymap.set('i', '<c-space>', function()
