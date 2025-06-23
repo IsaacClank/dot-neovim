@@ -67,18 +67,29 @@ return {
       })
 
       vim.lsp.config('omnisharp', {
-        cmd = { "/home/isaac/.local/share/nvim/mason/packages/omnisharp/omnisharp" },
+        cmd = { "/home/isaac/.local/share/nvim/mason/bin/OmniSharp", "-lsp" },
+        filetypes = { 'cs' },
+        root_markers = { ".git", ".sln", ".csproj", 'omnisharp.json', 'function.json' },
         settings = {
           MsBuild = {
-            enabled = true,
+            Enabled = true,
           },
           FormattingOptions = {
             EnableEditorConfigSupport = true,
             OrganizeImports = true,
           },
           RoslynExtensionsOptions = {
+            EnableAnalyzersSupport = true,
             EnableImportCompletion = true,
           },
+          FileOptions = {
+            SystemExcludeSearchPatterns = {
+              "**/node_modules/**/*",
+              "**/bin/**/*",
+              "**/obj/**/*"
+            },
+            ExcludeSearchPatterns = {}
+          }
         },
       })
 
@@ -88,7 +99,7 @@ return {
       -- vim.lsp.enable('html');
       vim.lsp.enable('jsonls');
       vim.lsp.enable('lua_ls');
-      -- vim.lsp.enable('omnisharp')
+      vim.lsp.enable('omnisharp')
       -- vim.lsp.enable('prismals');
       -- vim.lsp.enable('rust_analyzer');
       -- vim.lsp.enable('tailwindcss');
