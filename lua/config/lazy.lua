@@ -34,7 +34,6 @@ function MOD.init()
     defaults = {
       lazy = false,
       version = nil,
-      cond = vim.g.vscode ~= 1,
     },
     spec = {
       { import = "plugins" },
