@@ -68,6 +68,7 @@ return {
     end,
     opts = {
       view = {
+        width = {},
         float = {
           enable = true
         }
