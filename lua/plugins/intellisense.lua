@@ -31,6 +31,22 @@ return {
     },
     enabled = vim.g.vscode ~= 1,
     config = function()
+      vim.lsp.config('azure_pipelines_ls', {
+        root_markers = { '.git' },
+        settings = {
+          yaml = {
+            schemas = {
+              ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = {
+                "/azure-pipeline*.y*l",
+                "/*.azure*",
+                "Azure-Pipelines/**/*.y*l",
+                "Pipelines/*.y*l",
+                "**/*pipelines/*.y*l",
+              },
+            }
+          }
+        }
+      })
       vim.lsp.config('lua_ls', {
         on_init = function(client)
           if client.workspace_folders then
@@ -93,6 +109,7 @@ return {
         },
       })
 
+      vim.lsp.enable('azure_pipelines_ls');
       -- vim.lsp.enable('cssls');
       -- vim.lsp.enable('docker_compose_language_service');
       -- vim.lsp.enable('dockerls');
