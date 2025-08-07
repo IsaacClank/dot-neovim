@@ -166,6 +166,7 @@ return {
             rust = { "rustfmt " },
             typescript = { "prettier" },
             typescriptreact = { "prettier" },
+            markdown = { "prettier" },
           },
           default_format_opts = {
             lsp_format = "fallback",
