@@ -47,6 +47,7 @@ return {
           }
         }
       })
+
       vim.lsp.config('lua_ls', {
         on_init = function(client)
           if client.workspace_folders then
@@ -128,6 +129,9 @@ return {
       {
         'saghen/blink.cmp',
         version = '1.*',
+        dependencies = {
+          "mikavilpas/blink-ripgrep.nvim"
+        },
         opts = {
           cmdline = {
             enabled = false
@@ -143,6 +147,14 @@ return {
               auto_show = true,
               window = {
                 border = 'single'
+              }
+            }
+          },
+          sources = {
+            default = { 'lsp', 'path', 'snippets', 'buffer', "ripgrep" },
+            providers = {
+              ripgrep = {
+                module = "blink-ripgrep"
               }
             }
           },
