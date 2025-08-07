@@ -95,16 +95,17 @@ return {
             OrganizeImports = true,
           },
           RoslynExtensionsOptions = {
-            EnableAnalyzersSupport = true,
-            EnableImportCompletion = true,
+            enableDecompilationSupport = true,
+            enableImportCompletion = true,
+            enableAnalyzersSupport = true,
           },
           FileOptions = {
-            SystemExcludeSearchPatterns = {
+            systemExcludeSearchPatterns = {
               "**/node_modules/**/*",
               "**/bin/**/*",
               "**/obj/**/*"
             },
-            ExcludeSearchPatterns = {}
+            excludeSearchPatterns = {}
           }
         },
       })
