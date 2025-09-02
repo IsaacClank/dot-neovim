@@ -27,6 +27,8 @@ function MOD.bootstrap()
 
   vim.g.mapleader = " "
   vim.g.maplocalleader = "\\"
+  vim.g.markdown_fenced_languages = { "ts=typescript" }
+  vim.o.winborder = 'single';
 end
 
 function MOD.init()

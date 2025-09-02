@@ -113,6 +113,7 @@ return {
 
       vim.lsp.enable('azure_pipelines_ls');
       -- vim.lsp.enable('cssls');
+      vim.lsp.enable('denols')
       -- vim.lsp.enable('docker_compose_language_service');
       -- vim.lsp.enable('dockerls');
       -- vim.lsp.enable('html');
@@ -130,29 +131,69 @@ return {
         'saghen/blink.cmp',
         version = '1.*',
         dependencies = {
-          "mikavilpas/blink-ripgrep.nvim"
+          "mikavilpas/blink-ripgrep.nvim",
+          "onsails/lspkind.nvim",
+          "nvim-tree/nvim-web-devicons",
+          "rafamadriz/friendly-snippets",
         },
         opts = {
+          keymap = { preset = 'super-tab' },
+          keywrod = { range = 'prefix' },
           cmdline = {
             enabled = false
           },
           completion = {
-            list = {
-              selection = {
-                preselect = false,
-                auto_insert = true,
-              }
-            },
-            documentation = {
-              auto_show = true,
-              window = {
-                border = 'single'
+            documentation = { auto_show = true },
+            menu = {
+              draw = {
+                components = {
+                  kind_icon = {
+                    text = function(ctx)
+                      local icon = ctx.kind_icon
+                      if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                        local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+                        if dev_icon then
+                          icon = dev_icon
+                        end
+                      else
+                        icon = require("lspkind").symbolic(ctx.kind, {
+                          mode = "symbol",
+                        })
+                      end
+
+                      return icon .. ctx.icon_gap
+                    end,
+
+                    -- Optionally, use the highlight groups from nvim-web-devicons
+                    -- You can also add the same function for `kind.highlight` if you want to
+                    -- keep the highlight groups in sync with the icons.
+                    highlight = function(ctx)
+                      local hl = ctx.kind_hl
+                      if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                        local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                        if dev_icon then
+                          hl = dev_hl
+                        end
+                      end
+                      return hl
+                    end,
+                  }
+                }
               }
             }
           },
           sources = {
-            default = { 'lsp', 'path', 'snippets', 'buffer', "ripgrep" },
+            default = { 'lsp', 'path', 'snippets', "ripgrep" },
             providers = {
+              lsp = {
+                name = 'LSP',
+                module = 'blink.cmp.sources.lsp',
+                transform_items = function(_, items)
+                  return vim.tbl_filter(function(item)
+                    return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
+                  end, items)
+                end,
+              },
               ripgrep = {
                 module = "blink-ripgrep"
               }
