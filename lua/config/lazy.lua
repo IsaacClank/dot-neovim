@@ -29,6 +29,10 @@ function MOD.bootstrap()
   vim.g.maplocalleader = "\\"
   vim.g.markdown_fenced_languages = { "ts=typescript" }
   vim.o.winborder = 'single';
+
+  if vim.g.vscode == 1 then
+    vim.g.clipboard = vim.g.vscode_clipboard
+  end
 end
 
 function MOD.init()
