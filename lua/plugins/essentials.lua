@@ -49,7 +49,7 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     tag = "v1.12.0",
-    cond = vim.g.vscode ~= 1,
+    enabled = vim.g.vscode ~= 1,
     lazy = false,
     init = function()
       vim.g.loaded_netrw = 1
