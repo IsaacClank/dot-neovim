@@ -180,8 +180,8 @@ return {
             javascript = { "prettier" },
             prisma = { "prisma" },
             rust = { "rustfmt " },
-            typescript = { "prettier" },
-            typescriptreact = { "prettier" },
+            typescript = { "deno_fmt", "prettier", stop_after_first = true },
+            typescriptreact = { "deno_fmt", "prettier", stop_after_first = true },
             markdown = { "prettier" },
           },
           default_format_opts = {
@@ -189,6 +189,7 @@ return {
           },
           format_on_save = {
             lsp_format = "fallback",
+            timeout_ms = 500,
           },
           formatters = {
             prisma = {
