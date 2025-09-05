@@ -42,8 +42,8 @@ return {
     branch = "main",
     opts = {},
     keys = {
-      { "s", "<Plug>(leap-forward)",  mode = { "n", "x", "o" } },
-      { "S", "<Plug>(leap-backward)", mode = { "n", "x", "o" } },
+      { "<leader>s/", "<Plug>(leap-forward)",  mode = { "n", "x", "o" } },
+      { "<leader>s?", "<Plug>(leap-backward)", mode = { "n", "x", "o" } },
     }
   },
   {
