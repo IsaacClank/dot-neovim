@@ -17,11 +17,18 @@ return {
     branch = "master",
     enabled = vim.g.vscode ~= 1,
     opts = {
+      theme = 'onedark',
       sections = {
         lualine_c = {
           { 'filename',       path = 1 },
           { 'macro_recording' }
         },
+        lualine_x = {
+          { 'encoding' },
+          { 'fileformat' },
+          { 'filetype' },
+          { 'lsp_status' },
+        }
       },
       inactive_sections = {
         lualine_c = {
