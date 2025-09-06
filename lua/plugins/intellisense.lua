@@ -31,31 +31,25 @@ return {
     },
     enabled = vim.g.vscode ~= 1,
     config = function()
-      vim.lsp.config('azure_pipelines_ls', {
-        root_markers = { '.git' },
-        settings = {
-          yaml = {
-            schemas = {
-              ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = {
-                "/azure-pipeline*.y*l",
-                "/*.azure*",
-                "Azure-Pipelines/**/*.y*l",
-                "Pipelines/*.y*l",
-                "**/*pipelines/*.y*l",
-              },
-            }
-          }
-        }
+      vim.lsp.config('denols', {
+        cmd = { vim.fn.stdpath('data') .. '/mason/bin/deno', 'lsp' },
+        filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+        root_markers = { 'deno.json' }
+      });
+
+      vim.lsp.config('jsonls', {
+        cmd = { vim.fn.stdpath('data') .. '/mason/bin/vscode-json-language-server', '--stdio' },
+        filetypes = { 'json', 'jsonc' },
+        single_file_support = true,
       })
 
       vim.lsp.config('lua_ls', {
+        cmd = { vim.fn.stdpath('data') .. '/mason/bin/lua-language-server' },
+        filetypes = { 'lua' },
         on_init = function(client)
           if client.workspace_folders then
             local path = client.workspace_folders[1].name
-            if
-                path ~= vim.fn.stdpath('config')
-                and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
-            then
+            if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc')) then
               return
             end
           end
@@ -63,17 +57,13 @@ return {
           client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
             runtime = {
               version = 'LuaJIT',
-              path = {
-                'lua/?.lua',
-                'lua/?/init.lua',
-              },
             },
             workspace = {
               checkThirdParty = false,
               library = {
                 vim.env.VIMRUNTIME,
-                '${3rd}/luv/library',
-                '${3rd}/busted/library',
+                "${3rd}/luv/library",
+                "${3rd}/busted/library",
               }
             }
           })
@@ -83,47 +73,17 @@ return {
         }
       })
 
-      vim.lsp.config('omnisharp', {
-        cmd = { "/home/isaac/.local/share/nvim/mason/bin/OmniSharp", "-lsp" },
-        filetypes = { 'cs' },
-        root_markers = { ".git", ".sln", ".csproj", 'omnisharp.json', 'function.json' },
-        settings = {
-          MsBuild = {
-            Enabled = true,
-          },
-          FormattingOptions = {
-            EnableEditorConfigSupport = true,
-            OrganizeImports = true,
-          },
-          RoslynExtensionsOptions = {
-            enableDecompilationSupport = true,
-            enableImportCompletion = true,
-            enableAnalyzersSupport = true,
-          },
-          FileOptions = {
-            systemExcludeSearchPatterns = {
-              "**/node_modules/**/*",
-              "**/bin/**/*",
-              "**/obj/**/*"
-            },
-            excludeSearchPatterns = {}
-          }
-        },
+      vim.lsp.config('ts_ls', {
+        root_markers = { { 'package.json', 'tsconfig.json' } }
       })
 
-      vim.lsp.enable('azure_pipelines_ls');
-      -- vim.lsp.enable('cssls');
-      vim.lsp.enable('denols')
-      -- vim.lsp.enable('docker_compose_language_service');
-      -- vim.lsp.enable('dockerls');
-      -- vim.lsp.enable('html');
-      vim.lsp.enable('jsonls');
-      vim.lsp.enable('lua_ls');
-      vim.lsp.enable('omnisharp')
-      -- vim.lsp.enable('prismals');
-      -- vim.lsp.enable('rust_analyzer');
-      -- vim.lsp.enable('tailwindcss');
-      vim.lsp.enable('ts_ls');
+      vim.lsp.enable({
+        'denols',
+        'jsonls',
+        'lua_ls',
+        'rust_analyzer',
+        'ts_ls',
+      });
     end,
 
     dependencies = {
@@ -138,11 +98,11 @@ return {
         },
         opts = {
           keymap = { preset = 'super-tab' },
-          keywrod = { range = 'prefix' },
           cmdline = {
             enabled = false
           },
           completion = {
+            keyword = { range = 'prefix' },
             documentation = { auto_show = true },
             menu = {
               draw = {
@@ -200,7 +160,10 @@ return {
             }
           },
           fuzzy = {
-            implementation = "prefer_rust"
+            implementation = "prefer_rust",
+            sorts = {
+              'score',
+            }
           }
         }
       },
