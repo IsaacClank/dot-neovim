@@ -82,11 +82,9 @@ return {
     enabled = vim.g.vscode ~= 1,
   },
   {
-    "xiyaowong/transparent.nvim",
-    enabled = vim.g.vscode ~= 1,
-    lazy = false,
-    config = function()
-      vim.cmd('TransparentEnable')
-    end
+    "nvim-mini/mini.icons",
+    opts = {
+      style = 'glyph'
+    }
   },
 }

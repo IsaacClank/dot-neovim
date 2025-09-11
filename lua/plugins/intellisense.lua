@@ -33,19 +33,16 @@ return {
     config = function()
       vim.lsp.config('denols', {
         cmd = { vim.fn.stdpath('data') .. '/mason/bin/deno', 'lsp' },
-        filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
-        root_markers = { 'deno.json' }
+        root_markers = { 'deno.json' },
       });
 
       vim.lsp.config('jsonls', {
         cmd = { vim.fn.stdpath('data') .. '/mason/bin/vscode-json-language-server', '--stdio' },
-        filetypes = { 'json', 'jsonc' },
         single_file_support = true,
       })
 
       vim.lsp.config('lua_ls', {
         cmd = { vim.fn.stdpath('data') .. '/mason/bin/lua-language-server' },
-        filetypes = { 'lua' },
         on_init = function(client)
           if client.workspace_folders then
             local path = client.workspace_folders[1].name
@@ -74,14 +71,20 @@ return {
       })
 
       vim.lsp.config('ts_ls', {
-        root_markers = { { 'package.json', 'tsconfig.json' } }
+        cmd = { vim.fn.stdpath('data') .. '/mason/bin/typescript-language-server', '--stdio' },
+        root_dir = function(bufnr, on_dir)
+          local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml' }
+          local project_root = vim.fs.root(bufnr, root_markers)
+          if project_root then
+            on_dir(project_root)
+          end
+        end,
       })
 
       vim.lsp.enable({
         'denols',
         'jsonls',
         'lua_ls',
-        'rust_analyzer',
         'ts_ls',
       });
     end,
@@ -92,10 +95,13 @@ return {
         version = '1.*',
         dependencies = {
           "mikavilpas/blink-ripgrep.nvim",
-          "onsails/lspkind.nvim",
-          "nvim-tree/nvim-web-devicons",
+          "nvim-mini/mini.icons",
           "rafamadriz/friendly-snippets",
         },
+        init = function()
+          vim.cmd [[highlight link BlinkCmpLabelMatch PmenuMatch]]
+          vim.cmd [[highlight link BlinkCmpLabelDescription None]]
+        end,
         opts = {
           keymap = { preset = 'super-tab' },
           cmdline = {
@@ -104,37 +110,29 @@ return {
           completion = {
             keyword = { range = 'prefix' },
             documentation = { auto_show = true },
+            accept = {
+              auto_brackets = {
+                enabled = false,
+              }
+            },
             menu = {
               draw = {
+                columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'kind' } },
+                cursorline_priority = 0,
                 components = {
                   kind_icon = {
                     text = function(ctx)
-                      local icon = ctx.kind_icon
-                      if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                        local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-                        if dev_icon then
-                          icon = dev_icon
-                        end
-                      else
-                        icon = require("lspkind").symbolic(ctx.kind, {
-                          mode = "symbol",
-                        })
-                      end
-
-                      return icon .. ctx.icon_gap
+                      local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
+                      return kind_icon
                     end,
-
-                    -- Optionally, use the highlight groups from nvim-web-devicons
-                    -- You can also add the same function for `kind.highlight` if you want to
-                    -- keep the highlight groups in sync with the icons.
                     highlight = function(ctx)
-                      local hl = ctx.kind_hl
-                      if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                        local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-                        if dev_icon then
-                          hl = dev_hl
-                        end
-                      end
+                      local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
+                      return hl
+                    end,
+                  },
+                  kind = {
+                    highlight = function(ctx)
+                      local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
                       return hl
                     end,
                   }

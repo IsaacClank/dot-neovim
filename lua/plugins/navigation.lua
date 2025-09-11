@@ -3,7 +3,7 @@ return {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.8",
     enabled = vim.g.vscode ~= 1,
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", },
     opts = {
       defaults = {
         layout_strategy = 'vertical'

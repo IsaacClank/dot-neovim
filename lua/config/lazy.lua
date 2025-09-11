@@ -36,6 +36,10 @@ function MOD.bootstrap()
   if vim.g.vscode == 1 then
     vim.g.clipboard = vim.g.vscode_clipboarg
   end
+
+  vim.cmd [[highlight Normal guibg=None]]
+  vim.cmd [[highlight PmenuSel gui=None guibg=NvimDarkGrey4]]
+  vim.cmd [[highlight PmenuMatch gui=None guifg=NvimLightGrey4]]
 end
 
 function MOD.init()
