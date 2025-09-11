@@ -3,17 +3,15 @@ return {
     "folke/which-key.nvim",
     tag = "v3.17.0",
     event = "VeryLazy",
-    enabled = vim.g.vscode ~= 1,
     opts = {
       preset = 'helix',
       icons = { mappings = false },
       spec = {
         { "<leader>e",  group = "Explorer" },
         { "<leader>g",  group = "Git" },
-        { "<leader>gd", group = "Git Diff" },
         { "<leader>gr", group = "Git Reset" },
         { "<leader>gs", group = "Git Stage" },
-        { "<leader>gu", group = "Git Unstage" },
+        { "<leader>gv", group = "Git View Options" },
         { "<leader>l",  group = "Intellisense" },
         { "<leader>s",  group = "Navigation" },
         { "<M-Up>",     "<cmd>resize +5<cr>",          desc = "Increase height" },
@@ -23,13 +21,31 @@ return {
       },
     },
   },
-  { "echasnovski/mini.basics", branch = "main", opts = {} },
-  { "echasnovski/mini.pairs",  branch = "main", opts = {} },
+  {
+    "echasnovski/mini.basics",
+    branch = "main",
+    enabled = vim.g.vscode ~= 1,
+    lazy = false,
+    opts = {
+      options = { extra_ui = true },
+      mappings = { move_with_alt = true },
+    }
+  },
+  {
+    "echasnovski/mini.pairs",
+    branch = "main",
+    enabled = vim.g.vscode ~= 1,
+    lazy = false,
+    priority = 100,
+    opts = {}
+  },
   {
     "echasnovski/mini.surround",
     branch = "main",
+    lazy = false,
     opts = {
-      search_method = "cover_or_next",
+      n_lines = 500,
+      search_method = 'cover_or_next'
     }
   },
   {
@@ -40,6 +56,7 @@ return {
   {
     "ggandor/leap.nvim",
     branch = "main",
+    lazy = false,
     opts = {},
     keys = {
       { "<leader>s/", "<Plug>(leap-forward)",  mode = { "n", "x", "o" } },

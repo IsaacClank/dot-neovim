@@ -3,7 +3,6 @@ local MOD = {}
 
 function MOD.bootstrap()
   local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
   if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local repo = "https://github.com/folke/lazy.nvim.git"
     local repoCloningResult = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", repo, lazypath })
@@ -22,16 +21,20 @@ function MOD.bootstrap()
       os.exit(1)
     end
   end
-
   vim.opt.rtp:prepend(lazypath)
+
+  vim.o.termguicolors = true;
+
+  vim.g.loaded_node_provider = 0;
+  vim.g.loaded_perl_provider = 0;
+  vim.g.loaded_python3_provider = 0;
 
   vim.g.mapleader = " "
   vim.g.maplocalleader = "\\"
   vim.g.markdown_fenced_languages = { "ts=typescript" }
-  vim.o.winborder = 'single';
 
   if vim.g.vscode == 1 then
-    vim.g.clipboard = vim.g.vscode_clipboard
+    vim.g.clipboard = vim.g.vscode_clipboarg
   end
 end
 
