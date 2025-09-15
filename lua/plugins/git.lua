@@ -32,7 +32,8 @@ return {
       {
         "<leader>gvd",
         function()
-          require('gitsigns').diffthis(nil, { split = 'belowright' })
+          vim.cmd([[tabnew %]])
+          require('gitsigns').diffthis(nil, { split = 'leftabove' })
         end,
         desc = "Diff",
         mode = { "n" }
