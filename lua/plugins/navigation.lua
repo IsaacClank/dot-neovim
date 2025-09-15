@@ -14,7 +14,8 @@ return {
       },
     },
     keys = {
-      { "<leader>sp",     "<cmd>Telescope builtin<cr>",                desc = "Telescope" },
+      { "<leader>sp",     "<cmd>Telescope commands<cr>",               desc = "Commands" },
+      { "<leader>s<A-p>", "<cmd>Telescope builtin<cr>",                desc = "Telescope" },
       { "<leader>sb",     "<cmd>Telescope buffers<cr>",                desc = "Buffers" },
       { "<leader>so",     "<cmd>Telescope find_files<cr>",             desc = "Open file" },
       { "<leader>sO",     "<cmd>Telescope find_files hidden=true<cr>", desc = "Open file - Include hidden files" },
