@@ -10,9 +10,12 @@ return {
       },
     },
     keys = {
-      { "<leader>sf", "<cmd>Telescope find_files<cr>",             desc = "File browser" },
-      { "<leader>sF", "<cmd>Telescope find_files hidden=true<cr>", desc = "File browser - Include hidden files" },
-      { "<leader>sg", "<cmd>Telescope live_grep<cr>",              desc = "Text" },
+      { "<leader>sp",     "<cmd>Telescope builtin<cr>",                desc = "Telescope" },
+      { "<leader>sb",     "<cmd>Telescope buffers<cr>",                desc = "Buffers" },
+      { "<leader>so",     "<cmd>Telescope find_files<cr>",             desc = "Open file" },
+      { "<leader>sO",     "<cmd>Telescope find_files hidden=true<cr>", desc = "Open file - Include hidden files" },
+      { "<leader>s<A-o>", "<cmd>Telescope find_files hidden=true<cr>", desc = "Open file - Only (git) tracked files" },
+      { "<leader>sf",     "<cmd>Telescope live_grep<cr>",              desc = "Find by text" },
     },
   },
 }
