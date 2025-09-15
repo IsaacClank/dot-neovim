@@ -1,6 +1,6 @@
 return {
   {
-    "echasnovski/mini.indentscope",
+    "nvim-mini/mini.indentscope",
     branch = "main",
     enabled = vim.g.vscode ~= 1,
     config = function()
