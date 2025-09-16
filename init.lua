@@ -1,3 +1,7 @@
+if (vim.g.vscode == 1) then
+  return;
+end
+
 -- mini.deps bootstrap & initialization
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
