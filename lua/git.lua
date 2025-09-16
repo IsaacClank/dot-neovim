@@ -5,7 +5,7 @@ local M = {}
 M.setup = function()
   deps.add({
     source = 'kdheepak/lazygit.nvim',
-    checkout = 'v0.55.0'
+    checkout = 'main'
   })
   vim.keymap.set('n', '<Leader>gg', '<Cmd>LazyGit<CR>', { desc = 'Dashboard' })
 
