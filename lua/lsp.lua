@@ -1,96 +1,16 @@
-local minideps = require('mini.deps')
+local deps = require('mini.deps')
 
 local M = {}
 
 M.setup = function()
-  minideps.add({
-    source = 'nvim-treesitter/nvim-treesitter',
-    checkout = 'master',
-    monitor = 'main',
-    hooks = { post_checkout = function() vim.cmd [[TSUpdate]] end }
-  })
-
-  minideps.add({
-    source = 'saghen/blink.cmp',
-    checkout = 'v1.6.0',
-    depends = {
-      "mikavilpas/blink-ripgrep.nvim",
-      "rafamadriz/friendly-snippets",
-    },
-  })
-
-  minideps.add({
+  deps.add({
     source = 'neovim/nvim-lspconfig',
     checkout = 'v2.4.0',
-    depends = {
-      'williamboman/mason.nvim',
-      "stevearc/conform.nvim",
-    }
-  })
-
-  require('nvim-treesitter').setup({
-    auto_install = true,
-    ensure_installed = { "vim", "regex", "lua", "bash", "markdown", "markdown_inline" },
-    highlight = { enable = true },
-    incremental_selection = { enable = true },
-    textobjects = { enable = true },
-  })
-
-  vim.cmd [[highlight link BlinkCmpLabelMatch PmenuMatch]]
-  vim.cmd [[highlight link BlinkCmpLabelDescription None]]
-  require('blink.cmp').setup({
-    keymap = { preset = 'super-tab' },
-    cmdline = { enabled = false },
-    completion = {
-      keyword = { range = 'prefix' },
-      documentation = { auto_show = true },
-      accept = { auto_brackets = { enabled = false } },
-      menu = {
-        draw = {
-          columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'kind' } },
-          cursorline_priority = 0,
-          components = {
-            kind_icon = {
-              text = function(ctx)
-                local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
-                return kind_icon
-              end,
-              highlight = function(ctx)
-                local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
-                return hl
-              end,
-            },
-            kind = {
-              highlight = function(ctx)
-                local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
-                return hl
-              end,
-            }
-          }
-        }
-      }
-    },
-    sources = {
-      default = { 'lsp', 'path', 'snippets', "ripgrep" },
-      providers = {
-        lsp = {
-          name = 'LSP',
-          module = 'blink.cmp.sources.lsp',
-          transform_items = function(_, items)
-            return vim.tbl_filter(function(item)
-              return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-            end, items)
-          end,
-        },
-        ripgrep = {
-          module = "blink-ripgrep"
-        }
-      }
-    },
-    fuzzy = { implementation = "lua" }
+    depends = { 'williamboman/mason.nvim' }
   })
 
   require('mason').setup({})
+
   vim.lsp.config('denols', {
     cmd = { vim.fn.stdpath('data') .. '/mason/bin/deno', 'lsp' },
     root_markers = { 'deno.json' },
@@ -127,43 +47,9 @@ M.setup = function()
 
   vim.lsp.enable({
     'denols',
-    -- 'jsonls',
     'lua_ls',
-    -- 'ts_ls',
   });
 
-  require('conform').setup({
-    formatters_by_ft = {
-      css = { "prettier" },
-      html = { "prettier" },
-      javascript = { "prettier" },
-      prisma = { "prisma" },
-      rust = { "rustfmt " },
-      typescript = { "deno_fmt", "prettier", stop_after_first = true },
-      typescriptreact = { "deno_fmt", "prettier", stop_after_first = true },
-      markdown = { "prettier" },
-    },
-    default_format_opts = {
-      lsp_format = "fallback",
-    },
-    format_on_save = {
-      lsp_format = "fallback",
-      timeout_ms = 500,
-    },
-    formatters = {
-      prisma = {
-        command = "npx",
-        args = { "prisma", "format", "--schema", "$FILENAME" },
-        cwd = function()
-          return vim.fs.root(0, { "package.json" })
-        end,
-        stdin = false,
-        tmpfile_format = "$FILENAME.conform.tmp",
-      },
-    },
-  })
-
-  vim.keymap.set('n', '<Leader>lf', function() require('conform').format() end, { desc = 'Format' })
   vim.keymap.set('n', "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "Code Action", })
   vim.keymap.set('n', "<Leader>ld", function() vim.lsp.buf.definition() end, { desc = "Definition" })
   vim.keymap.set('n', "<Leader>li", function() vim.lsp.buf.implementation() end, { desc = "Implementation", })

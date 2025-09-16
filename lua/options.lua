@@ -15,7 +15,6 @@ M.setup = function()
 
   vim.g.mapleader = " "
   vim.g.maplocalleader = "\\"
-  vim.g.markdown_fenced_languages = { "ts=typescript" }
 
   if vim.g.vscode == 1 then
     vim.g.clipboard = vim.g.vscode_clipboarg

@@ -22,6 +22,11 @@ M.setup = function()
       layout_config = {
         prompt_position = "top"
       }
+    },
+    pickers = {
+      colorscheme = {
+        enable_preview = true
+      },
     }
   })
 
