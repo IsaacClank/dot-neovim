@@ -19,7 +19,7 @@ M.setup = function()
     require('telescope').setup({
       defaults = {
         sorting_strategy = 'ascending',
-        layout_strategy = 'flex',
+        layout_strategy = 'center',
         layout_config = {
           prompt_position = "top"
         }
