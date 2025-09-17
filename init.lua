@@ -22,10 +22,7 @@ deps.setup({ path = { package = path_package } })
 require('options').setup()
 require('theme').setup()
 
-require('mini.basics').setup({ options = { extra_ui = false }, mappings = { move_with_alt = true } })
-require('mini.pairs').setup({})
-require('mini.surround').setup({})
-
+require('editing').setup()
 require('explorer').setup()
 require('statusline').setup()
 require('notification').setup()
