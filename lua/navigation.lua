@@ -15,7 +15,7 @@ M.setup = function()
     checkout = 'main',
   })
 
-  deps.later(function()
+  deps.now(function()
     require('telescope').setup({
       defaults = {
         sorting_strategy = 'ascending',
