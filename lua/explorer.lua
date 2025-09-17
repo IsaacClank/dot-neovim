@@ -1,19 +1,31 @@
-local minideps = require('mini.deps')
+local deps = require('mini.deps')
 
 local M = {}
 M.setup = function()
-  minideps.add({
+  deps.add({
     source = 'nvim-tree/nvim-tree.lua',
     checkout = 'v1.14.0',
   })
 
-  require('nvim-tree').setup({
-    view = {
-      float = { enable = true },
-    }
-  })
+  deps.later(function()
+    require('nvim-tree').setup({
+      view = {
+        float = { enable = true },
+      }
+    })
 
-  vim.keymap.set('n', '<Leader>ee', "<Cmd>NvimTreeToggle<CR>", { desc = 'Open explorer' })
-  vim.keymap.set('n', '<Leader>ef', "<Cmd>NvimTreeFindFileToggle<CR>", { desc = 'Open explorer at current file' })
+    vim.keymap.set(
+      'n',
+      '<Leader>ee',
+      '<Cmd>NvimTreeToggle<CR>',
+      { desc = 'Open explorer' }
+    )
+    vim.keymap.set(
+      'n',
+      '<Leader>ef',
+      '<Cmd>NvimTreeFindFileToggle<CR>',
+      { desc = 'Open explorer at current file' }
+    )
+  end)
 end
 return M

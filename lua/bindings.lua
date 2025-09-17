@@ -1,4 +1,4 @@
-local miniclue = require('mini.clue')
+local clue = require('mini.clue')
 
 local M = {}
 
@@ -8,7 +8,7 @@ M.setup = function()
   vim.keymap.set('n', '<M-Right>', function() vim.cmd [[vertical resize +5]] end, { desc = "Increase height" })
   vim.keymap.set('n', '<M-Left>', function() vim.cmd [[vertical resize -5]] end, { desc = "Decrease height" })
 
-  miniclue.setup({
+  clue.setup({
     triggers = {
       -- Leader triggers
       { mode = 'n', keys = '<Leader>' },
@@ -29,9 +29,9 @@ M.setup = function()
       { mode = 'n', keys = '<Leader>l', desc = '+Intellisense' },
       { mode = 'n', keys = '<Leader>s', desc = '+Navigation' },
 
-      miniclue.gen_clues.g(),
-      miniclue.gen_clues.windows(),
-      miniclue.gen_clues.z(),
+      clue.gen_clues.g(),
+      clue.gen_clues.windows(),
+      clue.gen_clues.z(),
     },
     window = {
       delay = 200,
