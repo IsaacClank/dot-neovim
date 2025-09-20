@@ -8,6 +8,7 @@ M.setup = function()
   vim.o.tabstop = 2          -- Number of spaces to render tabs in a file. This does **not** modify the file.
 
   vim.o.termguicolors = true -- Enable 24-bit RGB colors
+  vim.o.winborder = 'single'
 
   vim.g.loaded_node_provider = 0;
   vim.g.loaded_perl_provider = 0;
