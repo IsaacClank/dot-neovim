@@ -54,7 +54,7 @@ M.setup = function()
     });
 
     vim.keymap.set('n', "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "Code Action", })
-    vim.keymap.set('n', "<Leader>lk", function() vim.lsp.buf.hover() end, { desc = "Hover", })
+    vim.keymap.set('n', "<Leader>lk", function() vim.lsp.buf.hover({ border = 'single' }) end, { desc = "Hover", })
     vim.keymap.set('n', "<Leader>lK", function() vim.diagnostic.open_float() end, { desc = "Hover diagnostic", })
     vim.keymap.set('n', "<Leader>ln", function() vim.lsp.buf.rename() end, { desc = "Rename", })
   end)
