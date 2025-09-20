@@ -41,7 +41,7 @@ M.setup = function()
     vim.keymap.set('n', "<Leader>ss", "<Cmd>Telescope lsp_document_symbols<CR>", { desc = "Document symbols" })
     vim.keymap.set('n', "<Leader>sS", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", { desc = "Workspace symbols" })
 
-    vim.keymap.set('n', "<Leader>sd", "<Cmd>Telescope lsp_defintions<CR>", { desc = "Definitions" })
+    vim.keymap.set('n', "<Leader>sd", "<Cmd>Telescope lsp_definitions<CR>", { desc = "Definitions" })
     vim.keymap.set('n', "<Leader>si", "<Cmd>Telescope lsp_implementations<CR>", { desc = "Implementations" })
 
     require('leap').setup({})
