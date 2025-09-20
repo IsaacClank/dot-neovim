@@ -10,7 +10,12 @@ M.setup = function()
   deps.later(function()
     require('nvim-tree').setup({
       view = {
-        float = { enable = true },
+        float = {
+          enable = true,
+          open_win_config = {
+            width = 60,
+          }
+        },
       }
     })
 
