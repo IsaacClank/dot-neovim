@@ -46,7 +46,7 @@ M.setup = function()
 
     require('leap').setup({})
     vim.keymap.set('n', '<Leader>s/', '<Plug>(leap-forward)', { desc = 'Leap forward' })
-    vim.keymap.set('n', '<Leader>s?', '<Plug>(leap-forward)', { desc = 'Leap backward' })
+    vim.keymap.set('n', '<Leader>s?', '<Plug>(leap-backward)', { desc = 'Leap backward' })
   end)
 end
 
