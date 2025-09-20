@@ -18,6 +18,7 @@ M.setup = function()
     require('blink.cmp').setup({
       keymap = { preset = 'super-tab' },
       cmdline = { enabled = false },
+      signature = { enabled = true },
       completion = {
         keyword = { range = 'prefix' },
         documentation = { auto_show = true },
