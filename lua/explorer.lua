@@ -5,6 +5,7 @@ M.setup = function()
   deps.add({
     source = 'nvim-tree/nvim-tree.lua',
     checkout = 'v1.14.0',
+    depends = { 'nvim-tree/nvim-web-devicons' }
   })
 
   deps.later(function()
@@ -16,7 +17,7 @@ M.setup = function()
             width = 60,
           }
         },
-      }
+      },
     })
 
     vim.keymap.set(
