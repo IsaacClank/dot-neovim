@@ -24,26 +24,7 @@ M.setup = function()
         documentation = { auto_show = true },
         menu = {
           draw = {
-            columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'kind' } },
-            cursorline_priority = 0,
-            components = {
-              kind_icon = {
-                text = function(ctx)
-                  local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
-                  return kind_icon
-                end,
-                highlight = function(ctx)
-                  local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
-                  return hl
-                end,
-              },
-              kind = {
-                highlight = function(ctx)
-                  local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
-                  return hl
-                end,
-              }
-            }
+            columns = { { 'label', 'label_description', gap = 1 }, { 'kind' } },
           }
         }
       },
