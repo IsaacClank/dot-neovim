@@ -1,6 +1,6 @@
 local deps = require('mini.deps')
-local M = {}
 
+local M = {}
 M.setup = function()
   deps.add('bluz71/vim-moonfly-colors')
   deps.add('catppuccin/nvim')
@@ -13,14 +13,12 @@ M.setup = function()
   deps.add('vague2k/vague.nvim')
   deps.add('tanvirtin/monokai.nvim')
 
-  deps.now(function()
-    require('mini.indentscope').setup({
-      draw = {
-        animation = require('mini.indentscope').gen_animation.linear({ duration = 5 })
-      }
-    })
+  require('mini.indentscope').setup({
+    draw = {
+      animation = require('mini.indentscope').gen_animation.linear({ duration = 5 })
+    }
+  })
 
-    vim.cmd [[colorscheme catppuccin]]
-  end)
+  vim.cmd [[colorscheme catppuccin]]
 end
 return M

@@ -8,20 +8,27 @@ M.setup = function()
   vim.keymap.set('n', '<M-Right>', function() vim.cmd [[vertical resize +5]] end, { desc = "Increase height" })
   vim.keymap.set('n', '<M-Left>', function() vim.cmd [[vertical resize -5]] end, { desc = "Decrease height" })
 
+  vim.keymap.set(
+    'n',
+    '<C-w>c',
+    [[<Cmd>EditorClose<CR>]],
+    { desc = "Close editor" }
+  )
+  vim.keymap.set(
+    'n',
+    '<C-w>C',
+    [[<Cmd>EditorClose!<CR>]],
+    { desc = "Discard changes and close editor" }
+  )
+
   clue.setup({
     triggers = {
-      -- Leader triggers
       { mode = 'n', keys = '<Leader>' },
       { mode = 'x', keys = '<Leader>' },
-
-      -- `g` key
       { mode = 'n', keys = 'g' },
-
-      -- Window commands
-      { mode = 'n', keys = '<C-w>' },
-
-      -- `z` key
       { mode = 'n', keys = 'z' },
+      { mode = 'n', keys = '<C-w>' },
+      { mode = 'n', keys = [[\]] },
     },
     clues = {
       { mode = 'n', keys = '<Leader>e', desc = '+Explorer' },
@@ -34,7 +41,7 @@ M.setup = function()
       clue.gen_clues.z(),
     },
     window = {
-      delay = 200,
+      delay = 350,
       config = {
         width = 'auto'
       }

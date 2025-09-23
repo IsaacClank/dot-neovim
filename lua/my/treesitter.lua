@@ -13,10 +13,6 @@ M.setup = function()
   deps.later(function()
     require('nvim-treesitter').setup({
       auto_install = true,
-      ensure_installed = { "vim", "regex", "lua", "bash", "markdown", "markdown_inline" },
-      highlight = { enable = true },
-      incremental_selection = { enable = true },
-      textobjects = { enable = true },
     })
   end)
 end

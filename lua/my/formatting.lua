@@ -42,7 +42,7 @@ M.setup = function()
       },
     })
 
-    vim.keymap.set('n', '<Leader>lf', function() conform.format() end, { desc = 'Format' })
+    vim.keymap.set('n', '<Leader>lf', conform.format, { desc = 'Format' })
   end)
 end
 
