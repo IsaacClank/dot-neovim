@@ -2,7 +2,24 @@ local deps = require('mini.deps')
 
 local M = {}
 
-M.setup = function()
+local setup_mini_completion = function()
+  deps.add({
+    source = 'rafamadriz/friendly-snippets',
+  })
+
+  local mini_snippets = require('mini.snippets')
+  local mini_completion = require('mini.completion')
+
+  mini_snippets.setup({
+    snippets = {
+      mini_snippets.gen_loader.from_lang()
+    }
+  })
+
+  mini_completion.setup({})
+end
+
+local setup_blink = function()
   deps.add({
     source = 'saghen/blink.cmp',
     checkout = 'v1.6.0',
@@ -41,13 +58,18 @@ M.setup = function()
             end,
           },
           ripgrep = {
-            module = "blink-ripgrep"
+            module = "blink-ripgrep",
+            score_offset = -5
           }
         }
       },
-      fuzzy = { implementation = "lua" }
     })
   end)
+end
+
+M.setup = function()
+  setup_blink()
+  -- setup_mini_completion()
 end
 
 return M
