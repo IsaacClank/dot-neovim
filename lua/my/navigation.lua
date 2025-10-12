@@ -35,7 +35,7 @@ local setup_telescope = function()
     { 'n', "<Leader>sr",     "<Cmd>Telescope lsp_references<CR>",                        { desc = "References" } },
     { 'n', "<Leader>ss",     "<Cmd>Telescope lsp_document_symbols<CR>",                  { desc = "Document symbols" } },
     { 'n', "<Leader>sS",     "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",         { desc = "Workspace symbols" } },
-    { 'n', "<Leader>sd",     "<Cmd>Telescope lsp_definitions<CR>",                       { desc = "Definitions" } },
+    { 'n', "<Leader>sd",     function() vim.lsp.buf.definition() end,                    { desc = "Definitions" } },
     { 'n', "<Leader>si",     "<Cmd>Telescope lsp_implementations<CR>",                   { desc = "Implementations" } },
   })
 end
