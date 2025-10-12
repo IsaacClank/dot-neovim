@@ -18,7 +18,7 @@ local setup_lsp__denols = function()
   deps.later(function()
     vim.lsp.config('denols', {
       cmd = { vim.fn.stdpath('data') .. '/mason/bin/deno', 'lsp' },
-      root_markers = { 'deno.json' },
+      root_markers = { "deno.json", "deno.jsonc" },
     });
     vim.lsp.enable('denols')
   end)
@@ -63,10 +63,26 @@ local setup_lsp__lua_ls = function()
   end)
 end
 
+local setup_lsp__ts_ls = function()
+  deps.later(function()
+    vim.lsp.config('ts_ls', {
+      cmd = { vim.fn.stdpath('data') .. '/mason/bin/typescript-language-server', '--stdio' },
+      root_dir = function(bufnr, on_dir)
+        local project_root = vim.fs.root(bufnr, { 'tsconfig.json' })
+        if project_root ~= nil then
+          on_dir(project_root)
+        end
+      end,
+    });
+    vim.lsp.enable('ts_ls')
+  end)
+end
+
 local setup_lsp = function()
   deps.later(function()
     setup_lsp__denols()
     setup_lsp__lua_ls()
+    setup_lsp__ts_ls()
 
     keymap.set_multiple({
       { 'n', "<Leader>la", vim.lsp.buf.code_action,   { desc = "Code Action", } },
