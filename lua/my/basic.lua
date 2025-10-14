@@ -71,7 +71,6 @@ M.setup = function()
   end)
 
   require('mini.basics').setup({
-    options = { extra_ui = true },
     mappings = { move_with_alt = true }
   })
 
