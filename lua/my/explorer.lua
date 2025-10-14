@@ -16,6 +16,8 @@ M.setup = function()
         enable = true,
         open_win_config = {
           width = 60,
+          row = 2,
+          col = 2,
         }
       },
     },
