@@ -2,6 +2,17 @@ local deps = require('mini.deps')
 
 local M = {}
 
+local typescript_formatters = function(bufnr)
+  local formatters = {}
+  local deno_root_dir = vim.fs.root(bufnr, { 'deno.json', 'deno.jsonc' })
+  if deno_root_dir ~= nil then
+    formatters = { 'deno_fmt' }
+  else
+    formatters = { 'prettier' }
+  end
+  return vim.tbl_deep_extend('force', formatters, { stop_after_first = true })
+end
+
 M.setup = function()
   deps.add({
     source = 'stevearc/conform.nvim',
@@ -18,8 +29,8 @@ M.setup = function()
         javascript = { "prettier" },
         prisma = { "prisma" },
         rust = { "rustfmt " },
-        typescript = { "deno_fmt", "prettier", stop_after_first = true },
-        typescriptreact = { "deno_fmt", "prettier", stop_after_first = true },
+        typescript = typescript_formatters,
+        typescriptreact = typescript_formatters,
         markdown = { "prettier" },
       },
       default_format_opts = {
