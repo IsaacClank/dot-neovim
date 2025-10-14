@@ -9,6 +9,8 @@ M.setup = function()
   })
 
   require('nvim-tree').setup({
+    auto_reload_on_write = true,
+    reload_on_bufenter = true,
     view = {
       float = {
         enable = true,
