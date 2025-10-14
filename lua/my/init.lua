@@ -13,8 +13,7 @@ local function bootstrap_mini()
     vim.cmd('packadd mini.nvim | helptags ALL')
     vim.cmd('echo "Installed `mini.nvim`" | redraw')
   end
-  local deps = require('mini.deps')
-  deps.setup({ path = { package = path_package } })
+  require('mini.deps').setup({ path = { package = path_package } })
 end
 
 M.setup = function()

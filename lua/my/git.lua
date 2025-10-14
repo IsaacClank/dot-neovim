@@ -19,7 +19,7 @@ M.setup = function()
     require('gitsigns').setup({
       numhl = true,
       current_line_blame = true,
-      current_line_blame_opts = { delay = 300 },
+      current_line_blame_opts = { delay = 300, virt_text_pos = 'right_align' },
       diff_opts = {
         algorithm = 'histogram',
         vertical = true,

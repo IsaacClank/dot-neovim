@@ -4,7 +4,7 @@ local mini_starter = require('mini.starter')
 
 local M = {}
 
-M.setup = function()
+local setup_EditorClose = function()
   vim.api.nvim_create_user_command(
     'EditorClose',
     function(input)
@@ -25,8 +25,8 @@ M.setup = function()
         end
 
         local buf_to_delete = vim.api.nvim_get_current_buf()
-        mini_starter.open()
         vim.api.nvim_buf_delete(buf_to_delete, { force = input.bang })
+        mini_starter.open()
         return
       end
 
@@ -49,6 +49,10 @@ M.setup = function()
     end,
     { desc = 'Close editor', bang = true }
   )
+end
+
+M.setup = function()
+  setup_EditorClose()
 end
 
 return M

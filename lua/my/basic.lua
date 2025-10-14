@@ -31,18 +31,44 @@ local setup_surround = function()
 end
 
 M.setup = function()
-  vim.o.scrolloff = 10       -- Minimum lines offset on top and bottom. Used to add padding.
-  vim.o.expandtab = true     -- In insert mode, expand tabs into spaces.
-  vim.o.shiftwidth = 2       -- Number of spaces used for auto-indent.
-  vim.o.tabstop = 2          -- Number of spaces to render tabs in a file. This does **not** modify the file.
-  vim.o.termguicolors = true -- Enable 24-bit RGB colors
-  vim.o.winborder = 'single' -- Default floating window border
+  vim.o.breakindentopt          = 'list:-1'                       -- Add padding for lists (if 'wrap' is set)
+  vim.o.expandtab               = true                            -- In insert mode, expand tabs into spaces.
+  vim.o.scrolloff               = 10                              -- Minimum lines offset on top and bottom. Used to add padding.
+  vim.o.shiftwidth              = 2                               -- Number of spaces used for auto-indent.
+  vim.o.shortmess               = 'CFOSWaco'                      -- Disable some built-in completion messages
+  vim.o.switchbuf               = 'usetab'                        -- Use already opened buffers when switching
+  vim.o.tabstop                 = 2                               -- Number of spaces to render tabs in a file. This does **not** modify the file.
+  vim.o.termguicolors           = true                            -- Enable 24-bit RGB colors
+  vim.o.winborder               = 'single'                        -- Default floating window border
+  vim.o.formatoptions           = 'rqnl1j'                        -- More intuitive comment editing (remove 'c' and 'o')
+  vim.o.completeopt             = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
 
-  vim.g.loaded_node_provider = 0;
-  vim.g.loaded_perl_provider = 0;
+  vim.g.loaded_node_provider    = 0;
+  vim.g.loaded_perl_provider    = 0;
   vim.g.loaded_python3_provider = 0;
-  vim.g.mapleader = " "
-  vim.g.maplocalleader = "\\"
+  vim.g.mapleader               = " "
+  vim.g.maplocalleader          = "\\"
+
+  -- Ensure excluded options of 'formatoptions' are not included by filetype detection
+  vim.api.nvim_create_autocmd('FileType', {
+    callback = function()
+      vim.opt.formatoptions:remove('c')
+      vim.opt.formatoptions:remove('o')
+    end
+  })
+
+  deps.later(function()
+    vim.diagnostic.config({
+      signs = { priority = 9999, severity = { min = 'WARN', max = 'ERROR' } },
+      underline = { severity = { min = 'HINT', max = 'ERROR' } },
+      virtual_lines = false,
+      virtual_text = {
+        current_line = true,
+        severity = { min = 'ERROR', max = 'ERROR' },
+      },
+      update_in_insert = false,
+    })
+  end)
 
   require('mini.basics').setup({
     options = { extra_ui = true },
