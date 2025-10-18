@@ -19,6 +19,12 @@ local setup_lsp__denols = function()
     vim.lsp.config('denols', {
       cmd = { vim.fn.stdpath('data') .. '/mason/bin/deno', 'lsp' },
       root_markers = { "deno.json", "deno.jsonc" },
+      root_dir = function(bufnr, on_dir)
+        local project_root = vim.fs.root(bufnr, { 'deno.json', 'deno.jsonc' })
+        if project_root ~= nil then
+          on_dir(project_root)
+        end
+      end,
     });
     vim.lsp.enable('denols')
   end)
