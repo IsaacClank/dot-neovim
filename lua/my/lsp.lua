@@ -69,6 +69,32 @@ local setup_lsp__lua_ls = function()
   end)
 end
 
+local setup_lsp__omnisharp = function()
+  deps.later(function()
+    vim.lsp.config('omnisharp', {
+      cmd = { vim.fn.stdpath('data') .. '/mason/bin/OmniSharp', "-z", "--hostPID", "12345", "--encoding", "utf-8", "--languageserver" },
+      settings = {
+        FormattingOptions = {
+          EnableEditorConfigSupport = true,
+          OrganizeImports = true,
+        },
+        MsBuild = {
+        },
+        RenameOptions = {},
+        RoslynExtensionsOptions = {
+          EnableAnalyzersSupport = true,
+          EnableImportCompletion = true,
+          EnablePackageAutoRestore = false,
+        },
+        Sdk = {
+          IncludePrereleases = true
+        }
+      }
+    });
+    vim.lsp.enable('omnisharp')
+  end)
+end
+
 local setup_lsp__ts_ls = function()
   deps.later(function()
     vim.lsp.config('ts_ls', {
@@ -88,6 +114,7 @@ local setup_lsp = function()
   deps.later(function()
     setup_lsp__denols()
     setup_lsp__lua_ls()
+    setup_lsp__omnisharp()
     setup_lsp__ts_ls()
 
     keymap.set_multiple({
