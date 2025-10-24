@@ -35,7 +35,6 @@ M.setup = function()
       { name = "monokai_soda" },
       { name = "moonfly" },
       { name = "onedark" },
-      { name = "onedark_dark" },
       { name = "onedark_vivid" },
       { name = "rose-pine-main" },
       { name = "rose-pine-moon" },
