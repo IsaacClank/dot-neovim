@@ -118,10 +118,15 @@ local setup_lsp = function()
     setup_lsp__ts_ls()
 
     keymap.set_multiple({
-      { 'n', "<Leader>la", vim.lsp.buf.code_action,   { desc = "Code Action", } },
-      { 'n', "<Leader>lk", vim.lsp.buf.hover,         { desc = "Hover", } },
-      { 'n', "<Leader>lK", vim.diagnostic.open_float, { desc = "Hover diagnostic", } },
-      { 'n', "<Leader>ln", vim.lsp.buf.rename,        { desc = "Rename", } },
+      { 'n', "<Leader>la", vim.lsp.buf.code_action,    { desc = "Code Action", } },
+      { 'n', "<Leader>ld", vim.lsp.buf.definition,     { desc = "Definitions" } },
+      { 'n', "<Leader>li", vim.lsp.buf.implementation, { desc = "Implementations" } },
+
+      { 'n', "<Leader>lk", vim.lsp.buf.hover,          { desc = "Hover", } },
+      { 'n', "<Leader>lK", vim.diagnostic.open_float,  { desc = "Hover diagnostic", } },
+
+      { 'n', "<Leader>ln", vim.lsp.buf.rename,         { desc = "Rename", } },
+      { 'n', "<Leader>lr", vim.lsp.buf.references,     { desc = "References" } },
     })
   end)
 end

@@ -32,11 +32,8 @@ local setup_telescope = function()
     { 'n', "<leader>so",     "<Cmd>Telescope find_files<CR>",                            { desc = "Open file" } },
     { 'n', "<leader>sO",     "<Cmd>Telescope find_files hidden=true no_ignore=true<CR>", { desc = "Open all file" } },
     { 'n', "<leader>sf",     "<Cmd>Telescope live_grep<CR>",                             { desc = "Find" } },
-    { 'n', "<Leader>sr",     "<Cmd>Telescope lsp_references<CR>",                        { desc = "References" } },
     { 'n', "<Leader>ss",     "<Cmd>Telescope lsp_document_symbols<CR>",                  { desc = "Document symbols" } },
     { 'n', "<Leader>sS",     "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",         { desc = "Workspace symbols" } },
-    { 'n', "<Leader>sd",     function() vim.lsp.buf.definition() end,                    { desc = "Definitions" } },
-    { 'n', "<Leader>si",     "<Cmd>Telescope lsp_implementations<CR>",                   { desc = "Implementations" } },
   })
 end
 
