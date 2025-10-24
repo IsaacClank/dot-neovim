@@ -46,6 +46,7 @@ M.setup = function()
       { name = "vague" },
       { name = "vscode" },
     }
+    _G.themes = themes
 
     math.randomseed(os.time())
     local random_theme = vim.tbl_get(themes, math.random(1, vim.tbl_count(themes)))

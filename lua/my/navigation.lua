@@ -25,15 +25,110 @@ local setup_telescope = function()
       },
     }
   })
+
+  local mini_pick = require('mini.pick')
+  mini_pick.setup()
+
+  mini_pick.registry.commands = function()
+    local source = {
+      name = 'commands',
+      items = function()
+        return vim.tbl_values(vim.api.nvim_get_commands({}))
+      end,
+      show = function(buf, commands, _)
+        local lines = vim.tbl_map(function(item)
+            return string.format("%32s | %s", item.name, item.definition)
+          end,
+          commands
+        )
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+      end,
+      choose = function(command)
+        vim.schedule(function()
+          vim.cmd(command.name)
+        end)
+      end
+    }
+    mini_pick.start({ source = source })
+  end
+
+  mini_pick.registry.files = function(local_opts)
+    local_opts = local_opts or {}
+
+    local command = { 'rg', '--color=never', '--files' };
+    if local_opts.hidden then
+      table.insert(command, "-.")
+    end
+    if local_opts.no_ignore then
+      table.insert(command, "--no-ignore")
+    end
+
+    return mini_pick.builtin.cli(
+      { command = command },
+      {
+        source = {
+          name = 'files',
+          show = function(buf, items, query)
+            mini_pick.default_show(buf, items, query, {
+              show_icons = true
+            })
+          end
+        }
+      })
+  end
+
+  mini_pick.registry.files_including_hidden = function()
+    return mini_pick.registry.files({ hidden = true })
+  end
+
+  mini_pick.registry.pickers = function()
+    mini_pick.start({
+      source = {
+        items = function() return vim.tbl_keys(mini_pick.registry) end,
+        choose = function(picker)
+          vim.schedule(function()
+            mini_pick.registry[picker]()
+          end)
+        end
+      }
+    })
+  end
+
+  mini_pick.registry.themes = function()
+    local original_theme = vim.g.colors_name
+
+    local result = mini_pick.start({
+      source = {
+        name = 'themes',
+        items = vim.tbl_map(function(theme) return theme.name end, _G.themes),
+        preview = function(buf, theme)
+          vim.cmd.colorscheme(theme)
+
+          local lines = vim.tbl_keys(vim.api.nvim_get_hl(0, {}))
+          table.sort(lines)
+          vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+        end
+      }
+    })
+
+    if result == nil then
+      vim.cmd.colorscheme(original_theme)
+    end
+  end
+
   keymap.set_multiple({
-    { 'n', '<Leader>sp',     '<Cmd>Telescope commands<CR>',                              { desc = 'Commands' } },
-    { 'n', '<Leader>s<A-p>', '<Cmd>Telescope builtin<CR>',                               { desc = 'Telescope' } },
-    { 'n', "<leader>sb",     "<Cmd>Telescope buffers<CR>",                               { desc = "Buffers" } },
-    { 'n', "<leader>so",     "<Cmd>Telescope find_files<CR>",                            { desc = "Open file" } },
-    { 'n', "<leader>sO",     "<Cmd>Telescope find_files hidden=true no_ignore=true<CR>", { desc = "Open all file" } },
-    { 'n', "<leader>sf",     "<Cmd>Telescope live_grep<CR>",                             { desc = "Find" } },
-    { 'n', "<Leader>ss",     "<Cmd>Telescope lsp_document_symbols<CR>",                  { desc = "Document symbols" } },
-    { 'n', "<Leader>sS",     "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",         { desc = "Workspace symbols" } },
+    { 'n', '<Leader>sp',     mini_pick.registry.commands,                        { desc = 'Commands' } },
+    { 'n', '<Leader>s<A-p>', mini_pick.registry.pickers,                         { desc = 'Commands (pickers only)' } },
+
+    { 'n', "<leader>sb",     mini_pick.registry.buffers,                         { desc = "Buffers" } },
+
+    { 'n', "<leader>sf",     mini_pick.registry.files,                           { desc = "Files" } },
+    { 'n', "<leader>sF",     mini_pick.registry.files_including_hidden,          { desc = "Files (hidden)" } },
+
+    { 'n', "<leader>sg",     mini_pick.registry.grep_live,                       { desc = "Grep (live)" } },
+
+    { 'n', "<Leader>ss",     "<Cmd>Telescope lsp_document_symbols<CR>",          { desc = "Symbols" } },
+    { 'n', "<Leader>sS",     "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", { desc = "Symbols (workspace)" } },
   })
 end
 

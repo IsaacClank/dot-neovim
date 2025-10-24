@@ -34,7 +34,7 @@ M.setup = function()
       { mode = 'n', keys = '<Leader>e', desc = '+Explorer' },
       { mode = 'n', keys = '<Leader>g', desc = '+Git' },
       { mode = 'n', keys = '<Leader>l', desc = '+Intellisense' },
-      { mode = 'n', keys = '<Leader>s', desc = '+Navigation' },
+      { mode = 'n', keys = '<Leader>s', desc = '+Search/Navigation' },
 
       clue.gen_clues.g(),
       clue.gen_clues.windows(),
