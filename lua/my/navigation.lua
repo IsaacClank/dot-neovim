@@ -52,6 +52,23 @@ local setup_telescope = function()
     mini_pick.start({ source = source })
   end
 
+  mini_pick.registry.config = function()
+    local command = { 'rg', '--color=never', '--files', vim.fs.dirname(vim.env.MYVIMRC) };
+
+    return mini_pick.builtin.cli(
+      { command = command },
+      {
+        source = {
+          name = 'files',
+          show = function(buf, items, query)
+            mini_pick.default_show(buf, items, query, {
+              show_icons = true
+            })
+          end
+        }
+      })
+  end
+
   mini_pick.registry.files = function(local_opts)
     local_opts = local_opts or {}
 
