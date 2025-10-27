@@ -81,6 +81,35 @@ local setup_telescope = function()
     return mini_pick.registry.files({ hidden = true })
   end
 
+  mini_pick.registry.files_recent = function(local_opts)
+    local_opts = vim.tbl_deep_extend('force', { current_dir = false, preserve_order = false }, local_opts or {})
+    return mini_pick.start({
+      source = {
+        name = 'files_recent',
+        items = function()
+          local recent_files = {}
+          local cwd = vim.uv.cwd() or error()
+          for _, path in ipairs(vim.v.oldfiles) do
+            if vim.fn.filereadable(path) and vim.startswith(path, cwd) then
+              table.insert(recent_files, vim.fs.relpath(cwd, path))
+            end
+          end
+          return recent_files
+        end,
+        show = function(buf, items_to_show, query)
+          mini_pick.default_show(buf, items_to_show, query, {
+            show_icons = true
+          })
+        end,
+        match = function(stritems, indices, query)
+          mini_pick.default_match(stritems, indices, query, {
+            preserve_order = true
+          })
+        end
+      }
+    })
+  end
+
   mini_pick.registry.pickers = function()
     mini_pick.start({
       source = {
@@ -123,6 +152,7 @@ local setup_telescope = function()
     { 'n', "<leader>sb",     mini_pick.registry.buffers,                         { desc = "Buffers" } },
 
     { 'n', "<leader>sf",     mini_pick.registry.files,                           { desc = "Files" } },
+    { 'n', "<leader>s<A-f>", mini_pick.registry.files_recent,                    { desc = "Files (recent)" } },
     { 'n', "<leader>sF",     mini_pick.registry.files_including_hidden,          { desc = "Files (hidden)" } },
 
     { 'n', "<leader>sg",     mini_pick.registry.grep_live,                       { desc = "Grep (live)" } },
