@@ -31,6 +31,7 @@ M.setup = function()
   require('my.statusline').setup()
   require('my.explorer').setup()
   require('my.notification').setup()
+  require('my.session').setup()
 
   require('my.navigation').setup()
   require('my.treesitter').setup()
