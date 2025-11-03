@@ -43,6 +43,7 @@ M.setup = function()
 	require("my.completion").setup()
 	require("my.git").setup()
 
+	require("my.extras").setup()
 	require("my.commands").setup()
 	require("my.bindings").setup()
 end
