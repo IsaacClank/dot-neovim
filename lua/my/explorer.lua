@@ -1,35 +1,29 @@
-local deps = require('mini.deps')
+local deps = require("mini.deps")
 
 local M = {}
 M.setup = function()
-  deps.add({
-    source = 'nvim-tree/nvim-tree.lua',
-    checkout = 'v1.14.0',
-    depends = { 'nvim-tree/nvim-web-devicons' }
-  })
+	deps.add({
+		source = "nvim-tree/nvim-tree.lua",
+		checkout = "v1.14.0",
+		depends = { "nvim-tree/nvim-web-devicons" },
+	})
 
-  require('nvim-tree').setup({
-    auto_reload_on_write = true,
-    reload_on_bufenter = true,
-    view = {
-      float = {
-        enable = true,
-        open_win_config = {
-          width = 60,
-          row = 2,
-          col = 2,
-        }
-      },
-    },
-  })
+	require("nvim-tree").setup({
+		auto_reload_on_write = true,
+		reload_on_bufenter = true,
+		view = {
+			float = {
+				enable = true,
+				open_win_config = {
+					width = 60,
+					row = 2,
+					col = 2,
+				},
+			},
+		},
+	})
 
-  vim.keymap.set(
-    'n', '<Leader>ee', '<Cmd>NvimTreeToggle<CR>',
-    { desc = 'Open explorer' }
-  )
-  vim.keymap.set(
-    'n', '<Leader>ef', '<Cmd>NvimTreeFindFileToggle<CR>',
-    { desc = 'Open explorer at current file' }
-  )
+	vim.keymap.set("n", "<Leader>ee", "<Cmd>NvimTreeToggle<CR>", { desc = "Open explorer" })
+	vim.keymap.set("n", "<Leader>ef", "<Cmd>NvimTreeFindFileToggle<CR>", { desc = "Open explorer at current file" })
 end
 return M

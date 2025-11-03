@@ -1,1 +1,1 @@
-require('my').setup()
+require("my").setup()
