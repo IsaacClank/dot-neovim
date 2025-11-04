@@ -51,8 +51,14 @@ local setup_telescope = function()
 	end
 
 	mini_pick.registry.config = function()
-		local command = { "rg", "--color=never", "--files", vim.fs.dirname(vim.env.MYVIMRC) }
-
+		local command = {
+			"rg",
+			"--color=never",
+			"--files",
+			"--glob=*.lua",
+			vim.fs.dirname(vim.env.MYVIMRC),
+			vim.fs.joinpath(vim.fn.stdpath("data"), "site", "pack", "deps"),
+		}
 		return mini_pick.builtin.cli({ command = command }, {
 			source = {
 				name = "files",
