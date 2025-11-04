@@ -167,13 +167,9 @@ local setup_telescope = function()
 	end
 
 	keymap.set_multiple({
-		{ "n", "<Leader>sp", mini_pick.registry.commands, { desc = "Commands" } },
-		{
-			"n",
-			"<Leader>s<A-p>",
-			mini_pick.registry.pickers,
-			{ desc = "Commands (pickers only)" },
-		},
+		{ "n", "<Leader>s:", mini_pick.registry.commands, { desc = "Commands" } },
+		{ "n", "<leader>s?", mini_pick.registry.help, { desc = "Help" } },
+		{ "n", "<Leader>sp", mini_pick.registry.pickers, { desc = "Pickers" } },
 
 		{ "n", "<leader>sb", mini_pick.registry.buffers, { desc = "Buffers" } },
 
