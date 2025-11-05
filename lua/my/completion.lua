@@ -69,6 +69,9 @@ local setup_blink = function()
 end
 
 M.setup = function()
+	vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
+	vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
+	vim.o.complete = ".,w,b,u"
 	setup_blink()
 	-- setup_mini_completion()
 end
