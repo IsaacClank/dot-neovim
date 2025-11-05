@@ -12,8 +12,7 @@ local setup_leap = function()
 	deps.later(function()
 		require("leap").setup({})
 		keymap.set_multiple({
-			{ "n", "gl", "<Plug>(leap-forward)", { desc = "Leap forward" } },
-			{ "n", "gL", "<Plug>(leap-backward)", { desc = "Leap backward" } },
+			{ "n", "gl", "<Plug>(leap)", { desc = "Leap" } },
 		})
 	end)
 end
