@@ -35,13 +35,11 @@ M.setup = function()
 	vim.o.scrolloff = 999 -- Minimum lines offset top & bottom. Used to add padding. When scrolling, cursor always at center
 	vim.o.sidescrolloff = 8 -- Minimum lines offset left & right. Used to add padding.
 	vim.o.shiftwidth = 2 -- Number of spaces used for auto-indent.
-	vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
 	vim.o.switchbuf = "usetab" -- Use already opened buffers when switching
 	vim.o.tabstop = 2 -- Number of spaces to render tabs in a file. This does **not** modify the file.
 	vim.o.termguicolors = true -- Enable 24-bit RGB colors
 	vim.o.winborder = "single" -- Default floating window border
 	vim.o.formatoptions = "rqnl1j" -- More intuitive comment editing (remove 'c' and 'o')
-	vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
 	vim.g.loaded_node_provider = 0
 	vim.g.loaded_perl_provider = 0

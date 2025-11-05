@@ -38,6 +38,7 @@ local setup_blink = function()
 			signature = { enabled = true },
 			completion = {
 				keyword = { range = "prefix" },
+				accept = { auto_brackets = { enabled = false } },
 				documentation = { auto_show = true },
 				menu = {
 					draw = {
