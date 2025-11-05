@@ -37,7 +37,7 @@ local setup_telescope = function()
 			end,
 			show = function(buf, commands, _)
 				local lines = vim.tbl_map(function(item)
-					return string.format("%32s | %s", item.name, item.definition)
+					return string.format("%-32s | %s", item.name, item.definition)
 				end, commands)
 				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 			end,
