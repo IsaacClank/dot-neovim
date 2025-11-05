@@ -40,6 +40,7 @@ M.setup = function()
 	vim.o.termguicolors = true -- Enable 24-bit RGB colors
 	vim.o.winborder = "single" -- Default floating window border
 	vim.o.formatoptions = "rqnl1j" -- More intuitive comment editing (remove 'c' and 'o')
+	vim.o.exrc = true -- Enable workspace configuration
 
 	vim.g.loaded_node_provider = 0
 	vim.g.loaded_perl_provider = 0
