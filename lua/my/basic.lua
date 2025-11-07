@@ -32,7 +32,7 @@ end
 M.setup = function()
 	vim.o.breakindentopt = "list:-1" -- Add padding for lists (if 'wrap' is set)
 	vim.o.expandtab = true -- In insert mode, expand tabs into spaces.
-	vim.o.scrolloff = 999 -- Minimum lines offset top & bottom. Used to add padding. When scrolling, cursor always at center
+	vim.o.scrolloff = 10 -- Minimum lines offset top & bottom. Used to add padding. When scrolling.
 	vim.o.sidescrolloff = 8 -- Minimum lines offset left & right. Used to add padding.
 	vim.o.shiftwidth = 2 -- Number of spaces used for auto-indent.
 	vim.o.switchbuf = "usetab" -- Use already opened buffers when switching
