@@ -1,27 +1,29 @@
 local M = {}
 
 local function bootstrap_mini()
-	local path_package = vim.fn.stdpath("data") .. "/site/"
-	local mini_path = path_package .. "pack/deps/start/mini.nvim"
-	if not vim.loop.fs_stat(mini_path) then
-		vim.cmd('echo "Installing `mini.nvim`" | redraw')
-		local clone_cmd = {
+	local package_path = vim.fs.joinpath(vim.fn.stdpath("data"), "site")
+
+	local mini_path = vim.fs.joinpath(package_path, "pack", "deps", "start", "mini.nvim")
+	local mini_path_exists = vim.loop.fs_stat(mini_path)
+	if not mini_path_exists then
+		vim.notify("Installing mini.nvim", vim.log.levels.INFO)
+		local clone_mini_cmd = {
 			"git",
 			"clone",
 			"--filter=blob:none",
 			"https://github.com/nvim-mini/mini.nvim",
 			mini_path,
 		}
-		vim.fn.system(clone_cmd)
+		vim.system(clone_mini_cmd)
 		vim.cmd("packadd mini.nvim | helptags ALL")
-		vim.cmd('echo "Installed `mini.nvim`" | redraw')
+		vim.notify("Installed mini.nvim", vim.log.levels.INFO)
 	end
-	require("mini.deps").setup({ path = { package = path_package } })
+	require("mini.deps").setup({ path = { package = package_path } })
 end
 
 M.setup = function()
 	if vim.g.vscode == 1 then
-		vim.g.clipboard = vim.g.vscode_clipboarg
+		vim.g.clipboard = vim.g.vscode_clipboard
 		return
 	end
 
