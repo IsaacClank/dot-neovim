@@ -158,6 +158,9 @@ local setup_telescope = function()
 					table.sort(lines)
 					vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 				end,
+				choose = function(theme)
+					vim.cmd.colorscheme(theme)
+				end,
 			},
 		})
 
