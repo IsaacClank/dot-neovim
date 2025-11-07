@@ -29,6 +29,12 @@ local setup_surround = function()
 	end)
 end
 
+local setup_split_join = function()
+	deps.later(function()
+		require("mini.splitjoin").setup({})
+	end)
+end
+
 M.setup = function()
 	vim.o.breakindentopt = "list:-1" -- Add padding for lists (if 'wrap' is set)
 	vim.o.expandtab = true -- In insert mode, expand tabs into spaces.
@@ -56,15 +62,21 @@ M.setup = function()
 		end,
 	})
 
+	local severity = vim.diagnostic.severity
 	deps.later(function()
 		vim.diagnostic.config({
-			signs = { priority = 9999, severity = { min = "WARN", max = "ERROR" } },
-			underline = { severity = { min = "HINT", max = "ERROR" } },
-			virtual_lines = false,
-			virtual_text = {
-				current_line = true,
-				severity = { min = "ERROR", max = "ERROR" },
+			signs = {
+				severity = { min = severity.WARN, max = severity.ERROR },
+				priority = 9999,
 			},
+			underline = {
+				severity = { min = severity.HINT, max = severity.ERROR },
+			},
+			virtual_text = {
+				severity = { min = severity.ERROR, max = severity.ERROR },
+				current_line = true,
+			},
+			virtual_lines = false,
 			update_in_insert = false,
 		})
 	end)
@@ -76,6 +88,7 @@ M.setup = function()
 	setup_pairs()
 	setup_surround()
 	setup_leap()
+	setup_split_join()
 end
 
 return M
