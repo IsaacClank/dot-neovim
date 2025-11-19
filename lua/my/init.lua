@@ -32,7 +32,7 @@ M.setup = function()
 	require("my.basic").setup()
 
 	require("my.theme").setup()
-	require("my.dashboard").setup()
+	-- require("my.dashboard").setup()
 	require("my.statusline").setup()
 	require("my.explorer").setup()
 	require("my.notification").setup()
