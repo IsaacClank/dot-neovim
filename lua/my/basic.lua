@@ -35,6 +35,13 @@ local setup_split_join = function()
 	end)
 end
 
+local setup_floatty = function()
+	deps.add({
+		source = "ingur/floatty.nvim",
+		checkout = "main",
+	})
+end
+
 M.setup = function()
 	vim.o.breakindentopt = "list:-1" -- Add padding for lists (if 'wrap' is set)
 	vim.o.expandtab = true -- In insert mode, expand tabs into spaces.
@@ -89,6 +96,7 @@ M.setup = function()
 	setup_surround()
 	setup_leap()
 	setup_split_join()
+	setup_floatty()
 end
 
 return M

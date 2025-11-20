@@ -37,6 +37,14 @@ M.setup = function()
 			end,
 			{ desc = "Decrease height" },
 		},
+
+		-- Terminal bindings
+		{
+			"t",
+			"<C-\\>q",
+			"<C-\\><C-n><C-w>q<CR>",
+			{ desc = "Quit terminal" },
+		},
 	})
 
 	clue.setup({

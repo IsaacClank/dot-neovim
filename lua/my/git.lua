@@ -26,7 +26,13 @@ M.setup = function()
 			},
 		})
 
+		local lazygit = require("floatty").setup({
+			cmd = "lazygit",
+			id = "lazygit",
+		})
+
 		command.create_multiple({
+			{ "GitView", lazygit.toggle, { desc = "Open LazyGit" } },
 			{
 				"GitStage",
 				function(opts)
@@ -45,8 +51,8 @@ M.setup = function()
 			{
 				"n",
 				"<Leader>gg",
-				":LazyGit<CR>",
-				{ desc = "LazyGit" },
+				":GitView<CR>",
+				{ desc = "Toggle Git view (LazyGit)" },
 			},
 
 			{
