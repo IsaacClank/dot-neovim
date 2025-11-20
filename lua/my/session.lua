@@ -20,12 +20,15 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("VimEnter", {
 		callback = function()
+			local detected_local_session = vim.iter(vim.tbl_values(session.detected)):any(function(v)
+				return v.type == "local"
+			end)
 			local started_with_file_argument = vim.iter(vim.v.argv):any(function(arg)
 				local stat = vim.uv.fs_stat(arg)
 				return stat ~= nil and stat.type == "file"
 			end)
 
-			if not started_with_file_argument then
+			if detected_local_session and not started_with_file_argument then
 				session.read()
 			end
 		end,
