@@ -49,6 +49,10 @@ local setup_lsp__lua_ls = function()
 					runtime = {
 						version = "LuaJIT",
 					},
+					path = {
+						"lua/?.lua",
+						"lua/?/init.lua",
+					},
 					workspace = {
 						checkThirdParty = false,
 						library = {
