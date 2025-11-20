@@ -42,6 +42,9 @@ M.setup = function()
 				{ desc = "File diff" },
 			},
 		})
+
+		vim.api.nvim_create_user_command("GitStageFile", "Gitsigns stage_buffer", {})
+		vim.api.nvim_create_user_command("GitUnstageFile", "Gitsigns reset_buffer_index", {})
 	end)
 end
 
