@@ -47,6 +47,9 @@ M.setup = function()
 			{ mode = "n", keys = "z" },
 			{ mode = "n", keys = "<C-w>" },
 			{ mode = "n", keys = [[\]] },
+			{ mode = "i", keys = "<C-x>" },
+			{ mode = "n", keys = "[" },
+			{ mode = "n", keys = "]" },
 		},
 		clues = {
 			{ mode = "n", keys = "<Leader>e", desc = "+Explorer" },
@@ -57,6 +60,8 @@ M.setup = function()
 			clue.gen_clues.g(),
 			clue.gen_clues.windows(),
 			clue.gen_clues.z(),
+			clue.gen_clues.builtin_completion(),
+			clue.gen_clues.square_brackets(),
 		},
 		window = {
 			delay = 350,
