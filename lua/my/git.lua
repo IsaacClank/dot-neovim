@@ -1,50 +1,99 @@
-local deps = require("mini.deps")
+local mini_deps = require("mini.deps")
+local mini_diff = require("mini.diff")
 local keymap = require("my.lib.keymap")
+local command = require("my.lib.command")
 
 local M = {}
 
 M.setup = function()
-	deps.add({
+	mini_deps.add({
 		source = "kdheepak/lazygit.nvim",
 		checkout = "main",
 	})
-	deps.add({
-		source = "lewis6991/gitsigns.nvim",
-		checkout = "v1.0.2",
-	})
 
-	deps.later(function()
-		vim.keymap.set("n", "<Leader>gg", "<Cmd>LazyGit<CR>", { desc = "Dashboard" })
+	mini_deps.later(function()
+		require("mini.git").setup()
 
-		require("gitsigns").setup({
-			numhl = true,
-			current_line_blame = true,
-			current_line_blame_opts = { delay = 300, virt_text_pos = "right_align" },
-			diff_opts = {
-				algorithm = "histogram",
-				vertical = true,
-				ignore_whitespace = true,
+		mini_diff.setup({
+			mappings = {
+				apply = "",
+				reset = "",
+				textobject = "",
+				goto_first = "",
+				goto_last = "",
+				goto_next = "",
+				goto_prev = "",
 			},
+		})
+
+		command.create_multiple({
+			{
+				"GitStage",
+				function(opts)
+					mini_diff.do_hunks(0, "apply", {
+						line_start = opts.line1,
+						line_end = opts.line2,
+					})
+				end,
+				{ range = "%" },
+			},
+			{ "GitStageFile", "Git add -- %" },
+			{ "GitUnstageFile", "Git restore --staged -- %" },
 		})
 
 		keymap.set_multiple({
-			{ "n", "<Leader>gn", ":Gitsigns nav_hunk 'next' preview=true<CR>", { desc = "Next hunk" } },
-			{ "n", "<Leader>gp", ":Gitsigns nav_hunk 'prev' preview=true<CR>", { desc = "Previous hunk" } },
-			{ "x", "<Leader>gs", ":'<,'>Gitsigns stage_hunk<CR>", { desc = "Stage/Unstage hunk" } },
-			{ "x", "<Leader>gr", ":'<,'>Gitsigns reset_hunk<CR>", { desc = "Reset hunk" } },
+			{
+				"n",
+				"<Leader>gg",
+				":LazyGit<CR>",
+				{ desc = "LazyGit" },
+			},
+
 			{
 				"n",
 				"<Leader>gd",
-				function()
-					vim.cmd([[tabnew %]])
-					require("gitsigns").diffthis(nil, { split = "leftabove" })
-				end,
-				{ desc = "File diff" },
+				":lua MiniDiff.toggle_overlay()<CR>",
+				{ desc = "Toggle diff overlay" },
+			},
+
+			{
+				"n",
+				"<Leader>gs",
+				":GitStageFile<CR>",
+				{ desc = "Stage file" },
+			},
+			{
+				"x",
+				"<Leader>gs",
+				":'<,'>GitStage<CR>",
+				{ desc = "Stage selected hunk" },
+			},
+
+			{
+				"n",
+				"]g",
+				":lua MiniDiff.goto_hunk 'next'<CR>",
+				{ desc = "Next hunk" },
+			},
+			{
+				"n",
+				"[g",
+				":lua MiniDiff.goto_hunk 'prev'<CR>",
+				{ desc = "Previous hunk" },
+			},
+			{
+				"n",
+				"]G",
+				":lua MiniDiff.goto_hunk 'last'<CR>",
+				{ desc = "Last hunk" },
+			},
+			{
+				"n",
+				"[G",
+				":lua MiniDiff.goto_hunk 'first'<CR>",
+				{ desc = "First hunk" },
 			},
 		})
-
-		vim.api.nvim_create_user_command("GitStageFile", "Gitsigns stage_buffer", {})
-		vim.api.nvim_create_user_command("GitUnstageFile", "Gitsigns reset_buffer_index", {})
 	end)
 end
 
