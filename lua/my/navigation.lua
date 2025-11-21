@@ -1,10 +1,11 @@
-local deps = require("mini.deps")
+local mini_deps = require("mini.deps")
+local mini_pick = require("mini.pick")
 local keymap = require("my.lib.keymap")
 
 local M = {}
 
 local setup_telescope = function()
-	deps.add({
+	mini_deps.add({
 		source = "nvim-telescope/telescope.nvim",
 		checkout = "0.1.8",
 		depends = {
@@ -25,9 +26,19 @@ local setup_telescope = function()
 			},
 		},
 	})
+end
 
-	local mini_pick = require("mini.pick")
-	mini_pick.setup()
+local setup_pickers = function()
+	mini_pick.setup({
+		mappings = {
+			execute = {
+				char = "<C-e>",
+				func = function()
+					vim.cmd(vim.fn.input("Execute: "))
+				end,
+			},
+		},
+	})
 
 	mini_pick.registry.commands = function()
 		local source = {
@@ -37,7 +48,11 @@ local setup_telescope = function()
 			end,
 			show = function(buf, commands, _)
 				local lines = vim.tbl_map(function(item)
-					return string.format("%-32s | %s", item.name, item.definition)
+					return string.format(
+						"%-32s | %s",
+						item.name,
+						item.definition
+					)
 				end, commands)
 				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 			end,
@@ -61,7 +76,7 @@ local setup_telescope = function()
 		}
 		return mini_pick.builtin.cli({ command = command }, {
 			source = {
-				name = "files",
+				name = "config",
 				show = function(buf, items, query)
 					mini_pick.default_show(buf, items, query, {
 						show_icons = true,
@@ -99,7 +114,11 @@ local setup_telescope = function()
 	end
 
 	mini_pick.registry.files_recent = function(local_opts)
-		local_opts = vim.tbl_deep_extend("force", { current_dir = false, preserve_order = false }, local_opts or {})
+		local_opts = vim.tbl_deep_extend(
+			"force",
+			{ current_dir = false, preserve_order = false },
+			local_opts or {}
+		)
 		return mini_pick.start({
 			source = {
 				name = "files_recent",
@@ -107,8 +126,14 @@ local setup_telescope = function()
 					local recent_files = {}
 					local cwd = vim.uv.cwd() or error()
 					for _, path in ipairs(vim.v.oldfiles) do
-						if vim.fn.filereadable(path) and vim.startswith(path, cwd) then
-							table.insert(recent_files, vim.fs.relpath(cwd, path))
+						if
+							vim.fn.filereadable(path)
+							and vim.startswith(path, cwd)
+						then
+							table.insert(
+								recent_files,
+								vim.fs.relpath(cwd, path)
+							)
 						end
 					end
 					return recent_files
@@ -122,6 +147,71 @@ local setup_telescope = function()
 					mini_pick.default_match(stritems, indices, query, {
 						preserve_order = true,
 					})
+				end,
+			},
+		})
+	end
+
+	mini_pick.registry.files_git_changes = function()
+		local command = {
+			"git",
+			"ls-files",
+			"-t",
+			"--exclude-standard",
+			"--modified",
+			-- "--deleted", --- Unsupported for now
+			"--others",
+		}
+		return mini_pick.builtin.cli({
+			command = command,
+			postprocess = function(output)
+				return vim.tbl_map(
+					function(line)
+						return {
+							git_status = string.sub(line, 1, 1),
+							file_path = string.sub(line, 3),
+						}
+					end,
+					vim.tbl_filter(function(line)
+						return line ~= ""
+					end, output)
+				)
+			end,
+		}, {
+			source = {
+				name = "files_git_changes",
+				show = function(buf, items, query)
+					local paths = vim.tbl_map(function(item)
+						return item.file_path
+					end, items)
+
+					mini_pick.default_show(buf, paths, query, {
+						show_icons = true,
+						icon_affix = function(l)
+							local item = vim.iter(items):find(function(item)
+								return item.file_path == l
+							end)
+
+							local affix = {
+								text = "[" .. item.git_status .. "]",
+							}
+
+							if item.git_status == "C" then
+								affix.hl_group = "DiagnosticWarn"
+							end
+							if item.git_status == "?" then
+								affix.hl_group = "DiagnosticOk"
+							end
+							if item.git_status == "R" then
+								affix.hl_group = "DiagnosticError"
+							end
+
+							return affix
+						end,
+					})
+				end,
+				preview = function(buf_id, item)
+					mini_pick.default_preview(buf_id, item.file_path)
 				end,
 			},
 		})
@@ -170,25 +260,56 @@ local setup_telescope = function()
 	end
 
 	keymap.set_multiple({
-		{ "n", "<Leader>s:", mini_pick.registry.commands, { desc = "Commands" } },
+		{
+			"n",
+			"<Leader>s:",
+			mini_pick.registry.commands,
+			{ desc = "Commands" },
+		},
 		{ "n", "<leader>s?", mini_pick.registry.help, { desc = "Help" } },
 		{ "n", "<Leader>sp", mini_pick.registry.pickers, { desc = "Pickers" } },
 
 		{ "n", "<leader>sb", mini_pick.registry.buffers, { desc = "Buffers" } },
 
 		{ "n", "<leader>sf", mini_pick.registry.files, { desc = "Files" } },
-		{ "n", "<leader>s<A-f>", mini_pick.registry.files_recent, { desc = "Files (recent)" } },
-		{ "n", "<leader>sF", mini_pick.registry.files_including_hidden, { desc = "Files (hidden)" } },
+		{
+			"n",
+			"<leader>s<A-f>",
+			mini_pick.registry.files_recent,
+			{ desc = "Files (recent)" },
+		},
+		{
+			"n",
+			"<leader>sF",
+			mini_pick.registry.files_including_hidden,
+			{ desc = "Files (hidden)" },
+		},
 
-		{ "n", "<leader>sg", mini_pick.registry.grep_live, { desc = "Grep (live)" } },
+		{
+			"n",
+			"<leader>sg",
+			mini_pick.registry.grep_live,
+			{ desc = "Grep (live)" },
+		},
 
-		{ "n", "<Leader>ss", "<Cmd>Telescope lsp_document_symbols<CR>", { desc = "Symbols" } },
-		{ "n", "<Leader>sS", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", { desc = "Symbols (workspace)" } },
+		{
+			"n",
+			"<Leader>ss",
+			"<Cmd>Telescope lsp_document_symbols<CR>",
+			{ desc = "Symbols" },
+		},
+		{
+			"n",
+			"<Leader>sS",
+			"<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",
+			{ desc = "Symbols (workspace)" },
+		},
 	})
 end
 
 M.setup = function()
-	setup_telescope()
+	setup_telescope() --- Migrating away from Telescope
+	setup_pickers()
 end
 
 return M
