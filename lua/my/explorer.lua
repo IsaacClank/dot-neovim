@@ -24,16 +24,37 @@ M.setup = function()
 		on_attach = function(bufnr)
 			local api = require("nvim-tree.api")
 			local function opts(desc)
-				return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+				return {
+					desc = "nvim-tree: " .. desc,
+					buffer = bufnr,
+					noremap = true,
+					silent = true,
+					nowait = true,
+				}
 			end
 
 			api.config.mappings.default_on_attach(bufnr)
-			vim.keymap.set("n", "<C-s>", api.node.open.horizontal, opts("Open: Horizontal Split"))
+			vim.keymap.set(
+				"n",
+				"<C-s>",
+				api.node.open.horizontal,
+				opts("Open: Horizontal Split")
+			)
 			vim.keymap.del("n", "<C-x>", { buffer = bufnr })
 		end,
 	})
 
-	vim.keymap.set("n", "<Leader>ee", "<Cmd>NvimTreeToggle<CR>", { desc = "Open explorer" })
-	vim.keymap.set("n", "<Leader>ef", "<Cmd>NvimTreeFindFileToggle<CR>", { desc = "Open explorer at current file" })
+	vim.keymap.set(
+		"n",
+		"<Leader>ee",
+		"<Cmd>NvimTreeToggle<CR>",
+		{ desc = "Open explorer" }
+	)
+	vim.keymap.set(
+		"n",
+		"<Leader>ef",
+		"<Cmd>NvimTreeFindFileToggle<CR>",
+		{ desc = "Open explorer at current file" }
+	)
 end
 return M
