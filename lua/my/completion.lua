@@ -42,7 +42,10 @@ local setup_blink = function()
 				documentation = { auto_show = true },
 				menu = {
 					draw = {
-						columns = { { "label", "label_description", gap = 1 }, { "kind" } },
+						columns = {
+							{ "label", "label_description", gap = 1 },
+							{ "kind" },
+						},
 					},
 				},
 			},
@@ -54,7 +57,8 @@ local setup_blink = function()
 						module = "blink.cmp.sources.lsp",
 						transform_items = function(_, items)
 							return vim.tbl_filter(function(item)
-								return item.kind ~= require("blink.cmp.types").CompletionItemKind.Keyword
+								return item.kind
+									~= require("blink.cmp.types").CompletionItemKind.Keyword
 							end, items)
 						end,
 					},
