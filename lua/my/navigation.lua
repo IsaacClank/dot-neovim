@@ -125,7 +125,8 @@ local setup_pickers = function()
 				items = function()
 					local recent_files = {}
 					local cwd = vim.uv.cwd() or error()
-					for _, path in ipairs(vim.v.oldfiles) do
+
+					vim.iter(_G.my_recent_files or {}):each(function(path)
 						if
 							vim.fn.filereadable(path)
 							and vim.startswith(path, cwd)
@@ -135,7 +136,33 @@ local setup_pickers = function()
 								vim.fs.relpath(cwd, path)
 							)
 						end
+					end)
+
+					local rg_cmd = { "rg", "--color=never", "--files" }
+					if local_opts.hidden then
+						table.insert(rg_cmd, "-.")
 					end
+					if local_opts.no_ignore then
+						table.insert(rg_cmd, "--no-ignore")
+					end
+					if vim.o.ignorecase then
+						table.insert(rg_cmd, "--ignore-case")
+					end
+					if vim.o.smartcase then
+						table.insert(rg_cmd, "--smart-case")
+					end
+					local rg_cmd_result = vim.system(rg_cmd, { text = true })
+						:wait()
+
+					for path in rg_cmd_result.stdout:gmatch("[^\n]+") do
+						local relative_path = vim.fs.relpath(cwd, path)
+						if
+							not vim.tbl_contains(recent_files, relative_path)
+						then
+							table.insert(recent_files, relative_path)
+						end
+					end
+
 					return recent_files
 				end,
 				show = function(buf, items_to_show, query)
@@ -271,12 +298,11 @@ local setup_pickers = function()
 
 		{ "n", "<leader>sb", mini_pick.registry.buffers, { desc = "Buffers" } },
 
-		{ "n", "<leader>sf", mini_pick.registry.files, { desc = "Files" } },
 		{
 			"n",
-			"<leader>s<A-f>",
+			"<leader>sf",
 			mini_pick.registry.files_recent,
-			{ desc = "Files (recent)" },
+			{ desc = "Files" },
 		},
 		{
 			"n",
