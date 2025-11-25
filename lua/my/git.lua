@@ -28,7 +28,13 @@ M.setup = function()
 
 		local lazygit = require("floatty").setup({
 			cmd = "lazygit",
-			id = "lazygit",
+			id = "LazyGit",
+			window = {
+				title = "LazyGit",
+				row = 0.035,
+				width = 0.9,
+				height = 0.9,
+			},
 		})
 
 		command.create_multiple({
