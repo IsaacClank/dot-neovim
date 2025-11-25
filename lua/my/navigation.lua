@@ -58,7 +58,7 @@ local setup_pickers = function()
 			end,
 			choose = function(command)
 				vim.schedule(function()
-					vim.cmd(command.name)
+					vim.api.nvim_input(":" .. command.name)
 				end)
 			end,
 		}
