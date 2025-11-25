@@ -2,7 +2,6 @@ local mini_deps = require("mini.deps")
 
 local M = {}
 M.setup = function()
-	mini_deps.add("bluz71/vim-moonfly-colors")
 	mini_deps.add("catppuccin/nvim")
 	mini_deps.add("folke/tokyonight.nvim")
 	mini_deps.add("mofiqul/vscode.nvim")
@@ -24,28 +23,27 @@ M.setup = function()
 
 	mini_deps.now(function()
 		local themes = {
-			{ name = "catppuccin" },
-			{ name = "catppuccin-frappe" },
-			{ name = "catppuccin-macchiato" },
+			-- { name = "catppuccin" },
+			-- { name = "catppuccin-frappe" },
+			-- { name = "catppuccin-macchiato" },
 			{ name = "catppuccin-mocha" },
 			{ name = "dracula" },
 			{ name = "everforest" },
 			{ name = "kanagawa" },
-			{ name = "kanagawa-dragon" },
-			{ name = "kanagawa-wave" },
+			-- { name = "kanagawa-dragon" },
+			-- { name = "kanagawa-wave" },
 			{ name = "monokai" },
-			{ name = "monokai_pro" },
-			{ name = "monokai_ristretto" },
-			{ name = "monokai_soda" },
-			{ name = "moonfly" },
+			-- { name = "monokai_pro" },
+			-- { name = "monokai_ristretto" },
+			-- { name = "monokai_soda" },
 			{ name = "onedark" },
-			{ name = "onedark_vivid" },
-			{ name = "rose-pine-main" },
-			{ name = "rose-pine-moon" },
+			-- { name = "onedark_vivid" },
+			{ name = "rose-pine" },
+			-- { name = "rose-pine-moon" },
 			{ name = "tokyonight" },
-			{ name = "tokyonight-moon" },
-			{ name = "tokyonight-night" },
-			{ name = "tokyonight-storm" },
+			-- { name = "tokyonight-moon" },
+			-- { name = "tokyonight-night" },
+			-- { name = "tokyonight-storm" },
 			{ name = "vague" },
 			{ name = "vscode" },
 		}
@@ -60,6 +58,13 @@ M.setup = function()
 			theme_setup()
 		end
 		vim.cmd("colorscheme " .. theme_name)
+	end)
+
+	mini_deps.later(function()
+		vim.notify(
+			"[my.theme] '" .. vim.g.colors_name .. "' was loaded",
+			vim.log.levels.INFO
+		)
 	end)
 end
 return M
