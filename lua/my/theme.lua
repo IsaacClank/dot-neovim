@@ -12,6 +12,7 @@ M.setup = function()
 	mini_deps.add("sainnhe/everforest")
 	mini_deps.add("vague2k/vague.nvim")
 	mini_deps.add("tanvirtin/monokai.nvim")
+	mini_deps.add("mofiqul/dracula.nvim")
 
 	require("mini.indentscope").setup({
 		draw = {
@@ -27,6 +28,7 @@ M.setup = function()
 			{ name = "catppuccin-frappe" },
 			{ name = "catppuccin-macchiato" },
 			{ name = "catppuccin-mocha" },
+			{ name = "dracula" },
 			{ name = "everforest" },
 			{ name = "kanagawa" },
 			{ name = "kanagawa-dragon" },
