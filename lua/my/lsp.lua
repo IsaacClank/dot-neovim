@@ -15,37 +15,40 @@ local setup_mason = function()
 end
 
 local setup_lsp__denols = function()
-	deps.later(function()
-		vim.lsp.config("denols", {
-			cmd = { vim.fn.stdpath("data") .. "/mason/bin/deno", "lsp" },
-			root_markers = { "deno.json", "deno.jsonc" },
-			root_dir = function(bufnr, on_dir)
-				local project_root = vim.fs.root(bufnr, { "deno.json", "deno.jsonc" })
-				if project_root ~= nil then
-					on_dir(project_root)
-				end
-			end,
-		})
-		vim.lsp.enable("denols")
-	end)
+	vim.lsp.config("denols", {
+		cmd = { vim.fn.stdpath("data") .. "/mason/bin/deno", "lsp" },
+	})
+end
+
+local setup_lsp__jsonls = function()
+	vim.lsp.config("jsonls", {
+		cmd = {
+			vim.fn.stdpath("data") .. "/mason/bin/vscode-json-language-server",
+			"--stdio",
+		},
+	})
+	vim.lsp.enable("jsonls")
 end
 
 local setup_lsp__lua_ls = function()
-	deps.later(function()
-		vim.lsp.config("lua_ls", {
-			cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
-			on_init = function(client)
-				if client.workspace_folders then
-					local path = client.workspace_folders[1].name
-					if
-						path ~= vim.fn.stdpath("config")
-						and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc"))
-					then
-						return
-					end
+	vim.lsp.config("lua_ls", {
+		cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
+		on_init = function(client)
+			if client.workspace_folders then
+				local path = client.workspace_folders[1].name
+				if
+					path ~= vim.fn.stdpath("config")
+					and (
+						vim.loop.fs_stat(path .. "/.luarc.json")
+						or vim.loop.fs_stat(path .. "/.luarc.jsonc")
+					)
+				then
+					return
 				end
+			end
 
-				client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+			client.config.settings.Lua =
+				vim.tbl_deep_extend("force", client.config.settings.Lua, {
 					runtime = {
 						version = "LuaJIT",
 					},
@@ -62,80 +65,96 @@ local setup_lsp__lua_ls = function()
 						},
 					},
 				})
-			end,
-			settings = {
-				Lua = {},
-			},
-		})
-		vim.lsp.enable("lua_ls")
-	end)
+		end,
+		settings = {
+			Lua = {},
+		},
+	})
+	vim.lsp.enable("lua_ls")
 end
 
 local setup_lsp__omnisharp = function()
-	deps.later(function()
-		vim.lsp.config("omnisharp", {
-			cmd = {
-				vim.fn.stdpath("data") .. "/mason/bin/OmniSharp",
-				"-z",
-				"--hostPID",
-				"12345",
-				"--encoding",
-				"utf-8",
-				"--languageserver",
+	vim.lsp.config("omnisharp", {
+		cmd = {
+			vim.fn.stdpath("data") .. "/mason/bin/OmniSharp",
+			"-z",
+			"--hostPID",
+			"12345",
+			"--encoding",
+			"utf-8",
+			"--languageserver",
+		},
+		settings = {
+			FormattingOptions = {
+				EnableEditorConfigSupport = true,
+				OrganizeImports = true,
 			},
-			settings = {
-				FormattingOptions = {
-					EnableEditorConfigSupport = true,
-					OrganizeImports = true,
-				},
-				MsBuild = {},
-				RenameOptions = {},
-				RoslynExtensionsOptions = {
-					EnableAnalyzersSupport = true,
-					EnableImportCompletion = true,
-					EnablePackageAutoRestore = false,
-				},
-				Sdk = {
-					IncludePrereleases = true,
-				},
+			MsBuild = {},
+			RenameOptions = {},
+			RoslynExtensionsOptions = {
+				EnableAnalyzersSupport = true,
+				EnableImportCompletion = true,
+				EnablePackageAutoRestore = false,
 			},
-		})
-		vim.lsp.enable("omnisharp")
-	end)
+			Sdk = {
+				IncludePrereleases = true,
+			},
+		},
+	})
 end
 
 local setup_lsp__ts_ls = function()
-	deps.later(function()
-		vim.lsp.config("ts_ls", {
-			cmd = { vim.fn.stdpath("data") .. "/mason/bin/typescript-language-server", "--stdio" },
-			root_dir = function(bufnr, on_dir)
-				local project_root = vim.fs.root(bufnr, { "tsconfig.json" })
-				if project_root ~= nil then
-					on_dir(project_root)
-				end
-			end,
-		})
-		vim.lsp.enable("ts_ls")
-	end)
+	vim.lsp.config("ts_ls", {
+		cmd = {
+			vim.fn.stdpath("data") .. "/mason/bin/typescript-language-server",
+			"--stdio",
+		},
+	})
 end
 
 local setup_lsp = function()
 	deps.later(function()
 		setup_lsp__denols()
+		setup_lsp__jsonls()
 		setup_lsp__lua_ls()
 		setup_lsp__omnisharp()
 		setup_lsp__ts_ls()
 
 		keymap.set_multiple({
-			{ "n", "<Leader>la", vim.lsp.buf.code_action, { desc = "Code Action" } },
-			{ "n", "<Leader>ld", vim.lsp.buf.definition, { desc = "Definitions" } },
-			{ "n", "<Leader>li", vim.lsp.buf.implementation, { desc = "Implementations" } },
+			{
+				"n",
+				"<Leader>la",
+				vim.lsp.buf.code_action,
+				{ desc = "Code Action" },
+			},
+			{
+				"n",
+				"<Leader>ld",
+				vim.lsp.buf.definition,
+				{ desc = "Definitions" },
+			},
+			{
+				"n",
+				"<Leader>li",
+				vim.lsp.buf.implementation,
+				{ desc = "Implementations" },
+			},
 
 			{ "n", "<Leader>lk", vim.lsp.buf.hover, { desc = "Hover" } },
-			{ "n", "<Leader>lK", vim.diagnostic.open_float, { desc = "Hover diagnostic" } },
+			{
+				"n",
+				"<Leader>lK",
+				vim.diagnostic.open_float,
+				{ desc = "Hover diagnostic" },
+			},
 
 			{ "n", "<Leader>ln", vim.lsp.buf.rename, { desc = "Rename" } },
-			{ "n", "<Leader>lr", vim.lsp.buf.references, { desc = "References" } },
+			{
+				"n",
+				"<Leader>lr",
+				vim.lsp.buf.references,
+				{ desc = "References" },
+			},
 		})
 	end)
 end
