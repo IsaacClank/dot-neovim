@@ -11,7 +11,6 @@ local function bootstrap_mini()
 		local clone_mini_cmd = {
 			"git",
 			"clone",
-			"--filter=blob:none",
 			"https://github.com/isaacclank/mini.nvim",
 			mini_path,
 		}

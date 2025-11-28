@@ -179,67 +179,119 @@ local setup_pickers = function()
 		})
 	end
 
+	---@class Item
+	---@field type string
+	---@field path string
+	---@field path_old string|nil
+	---@field git_status_tag string
+	---@field text string
 	mini_pick.registry.files_git_changes = function()
-		local command = {
-			"git",
-			"ls-files",
-			"-t",
-			"--exclude-standard",
-			"--modified",
-			-- "--deleted", --- Unsupported for now
-			"--others",
-		}
-		return mini_pick.builtin.cli({
-			command = command,
-			postprocess = function(output)
-				return vim.tbl_map(
-					function(line)
-						return {
-							git_status = string.sub(line, 1, 1),
-							file_path = string.sub(line, 3),
-						}
+		---@param output table<any, string>
+		---@return table<Item>
+		local parse_command_output = function(output)
+			return vim
+				.iter(output)
+				---@param line string
+				:filter(function(line)
+					return line ~= ""
+				end)
+				---@param line string
+				:map(function(line)
+					local type = "file"
+					local path = nil
+					local path_old = nil
+					local text = nil
+					local git_status_tag =
+						string.format("[%s]", vim.trim(string.sub(line, 1, 3)))
+
+					if git_status_tag == "[R]" then
+						_, path_old, path =
+							line:match("^(%a)%s+(%S+)%s+%->%s+(%S+)$")
+						text = string.format(
+							"%s -> %s %s",
+							path_old,
+							path,
+							git_status_tag
+						)
+					else
+						path = vim.trim(string.sub(line, 4))
+						text = string.format("%s %s", path, git_status_tag)
+					end
+
+					return {
+						type = type,
+						path = path,
+						path_old = path_old,
+						git_status_tag = git_status_tag,
+						text = text,
+					}
+				end)
+				:totable()
+		end
+
+		---@param buf_id integer
+		---@param items table<any, Item>
+		---@param query string
+		local custom_show = function(buf_id, items, query)
+			mini_pick.default_show(buf_id, items, query, {
+				show_icons = true,
+				hook = {
+					post_show = function(prefix_data)
+						local ns_id = vim.api.nvim_create_namespace("")
+						for i, item in ipairs(items) do
+							local row = i - 1 -- 0-based
+
+							local prefix_len = prefix_data[i].text:len()
+							local col = prefix_len + item.path:len() + 1
+							if item.path_old ~= nil then
+								col = col + item.path_old:len() + 4
+							end
+							local col_end = prefix_len + item.text:len() -- 0-based and exclusive
+
+							local highlight_group = nil
+							if
+								item.git_status_tag == "[M]"
+								or item.git_status_tag == "[MM]"
+								or item.git_status_tag == "[R]"
+							then
+								highlight_group = "DiagnosticWarn"
+							end
+							if
+								item.git_status_tag == "[??]"
+								or item.git_status_tag == "[A]"
+							then
+								highlight_group = "DiagnosticOk"
+							end
+							if item.git_status_tag == "[D]" then
+								highlight_group = "DiagnosticError"
+							end
+
+							vim.api.nvim_buf_set_extmark(
+								buf_id,
+								ns_id,
+								row,
+								col,
+								{
+									hl_mode = "replace",
+									priority = 200,
+									hl_group = highlight_group,
+									end_row = row,
+									end_col = col_end,
+								}
+							)
+						end
 					end,
-					vim.tbl_filter(function(line)
-						return line ~= ""
-					end, output)
-				)
-			end,
+				},
+			})
+		end
+
+		return mini_pick.builtin.cli({
+			command = { "git", "status", "--short" },
+			postprocess = parse_command_output,
 		}, {
 			source = {
 				name = "files_git_changes",
-				show = function(buf, items, query)
-					local paths = vim.tbl_map(function(item)
-						return item.file_path
-					end, items)
-
-					mini_pick.default_show(buf, paths, query, {
-						show_icons = true,
-						icon_affix = function(l)
-							local item = vim.iter(items):find(function(item)
-								return item.file_path == l
-							end)
-
-							local affix = {
-								text = "[" .. item.git_status .. "]",
-							}
-
-							if item.git_status == "C" then
-								affix.hl_group = "DiagnosticWarn"
-							end
-							if item.git_status == "?" then
-								affix.hl_group = "DiagnosticOk"
-							end
-							if item.git_status == "R" then
-								affix.hl_group = "DiagnosticError"
-							end
-
-							return affix
-						end,
-					})
-				end,
-				preview = function(buf_id, item)
-					mini_pick.default_preview(buf_id, item.file_path)
-				end,
+				show = custom_show,
 			},
 		})
 	end
