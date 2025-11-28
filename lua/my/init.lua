@@ -3,7 +3,8 @@ local M = {}
 local function bootstrap_mini()
 	local package_path = vim.fs.joinpath(vim.fn.stdpath("data"), "site")
 
-	local mini_path = vim.fs.joinpath(package_path, "pack", "deps", "start", "mini.nvim")
+	local mini_path =
+		vim.fs.joinpath(package_path, "pack", "deps", "start", "mini.nvim")
 	local mini_path_exists = vim.loop.fs_stat(mini_path)
 	if not mini_path_exists then
 		vim.notify("Installing mini.nvim", vim.log.levels.INFO)
@@ -11,7 +12,7 @@ local function bootstrap_mini()
 			"git",
 			"clone",
 			"--filter=blob:none",
-			"https://github.com/nvim-mini/mini.nvim",
+			"https://github.com/isaacclank/mini.nvim",
 			mini_path,
 		}
 		vim.system(clone_mini_cmd)
