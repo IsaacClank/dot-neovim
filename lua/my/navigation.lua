@@ -235,54 +235,47 @@ local setup_pickers = function()
 		local custom_show = function(buf_id, items, query)
 			mini_pick.default_show(buf_id, items, query, {
 				show_icons = true,
-				hook = {
-					post_show = function(prefix_data)
-						local ns_id = vim.api.nvim_create_namespace("")
-						for i, item in ipairs(items) do
-							local row = i - 1 -- 0-based
-
-							local prefix_len = prefix_data[i].text:len()
-							local col = prefix_len + item.path:len() + 1
-							if item.path_old ~= nil then
-								col = col + item.path_old:len() + 4
-							end
-							local col_end = prefix_len + item.text:len() -- 0-based and exclusive
-
-							local highlight_group = nil
-							if
-								item.git_status_tag == "[M]"
-								or item.git_status_tag == "[MM]"
-								or item.git_status_tag == "[R]"
-							then
-								highlight_group = "DiagnosticWarn"
-							end
-							if
-								item.git_status_tag == "[??]"
-								or item.git_status_tag == "[A]"
-							then
-								highlight_group = "DiagnosticOk"
-							end
-							if item.git_status_tag == "[D]" then
-								highlight_group = "DiagnosticError"
-							end
-
-							vim.api.nvim_buf_set_extmark(
-								buf_id,
-								ns_id,
-								row,
-								col,
-								{
-									hl_mode = "replace",
-									priority = 200,
-									hl_group = highlight_group,
-									end_row = row,
-									end_col = col_end,
-								}
-							)
-						end
-					end,
-				},
 			})
+
+			local ns_id = vim.api.nvim_create_namespace("")
+			local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+
+			for i, item in ipairs(items) do
+				local row = i - 1 -- 0-based
+
+				local prefix_len = lines[i]:len() - item.text:len()
+				local col = prefix_len + item.path:len() + 1
+				if item.path_old ~= nil then
+					col = col + item.path_old:len() + 4
+				end
+				local col_end = prefix_len + item.text:len() -- 0-based and exclusive
+
+				local highlight_group = nil
+				if
+					item.git_status_tag == "[M]"
+					or item.git_status_tag == "[MM]"
+					or item.git_status_tag == "[R]"
+				then
+					highlight_group = "DiagnosticWarn"
+				end
+				if
+					item.git_status_tag == "[??]"
+					or item.git_status_tag == "[A]"
+				then
+					highlight_group = "DiagnosticOk"
+				end
+				if item.git_status_tag == "[D]" then
+					highlight_group = "DiagnosticError"
+				end
+
+				vim.api.nvim_buf_set_extmark(buf_id, ns_id, row, col, {
+					hl_mode = "replace",
+					priority = 200,
+					hl_group = highlight_group,
+					end_row = row,
+					end_col = col_end,
+				})
+			end
 		end
 
 		return mini_pick.builtin.cli({
