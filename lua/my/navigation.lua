@@ -171,9 +171,7 @@ local setup_pickers = function()
 					})
 				end,
 				match = function(stritems, indices, query)
-					mini_pick.default_match(stritems, indices, query, {
-						preserve_order = true,
-					})
+					mini_pick.default_match(stritems, indices, query)
 				end,
 			},
 		})
