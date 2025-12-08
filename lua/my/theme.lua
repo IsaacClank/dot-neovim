@@ -4,10 +4,8 @@ local M = {}
 M.setup = function()
 	mini_deps.add("catppuccin/nvim")
 	mini_deps.add("folke/tokyonight.nvim")
-	mini_deps.add("mofiqul/vscode.nvim")
 	mini_deps.add("olimorris/onedarkpro.nvim")
 	mini_deps.add("rebelot/kanagawa.nvim")
-	mini_deps.add("rose-pine/neovim")
 	mini_deps.add("sainnhe/everforest")
 	mini_deps.add("vague2k/vague.nvim")
 	mini_deps.add("tanvirtin/monokai.nvim")
@@ -38,14 +36,11 @@ M.setup = function()
 			-- { name = "monokai_soda" },
 			{ name = "onedark" },
 			-- { name = "onedark_vivid" },
-			{ name = "rose-pine" },
-			-- { name = "rose-pine-moon" },
 			{ name = "tokyonight" },
 			-- { name = "tokyonight-moon" },
 			-- { name = "tokyonight-night" },
 			-- { name = "tokyonight-storm" },
 			{ name = "vague" },
-			{ name = "vscode" },
 		}
 		_G.themes = themes
 
