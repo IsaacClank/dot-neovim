@@ -41,6 +41,12 @@ M.setup = function()
 		-- Terminal bindings
 		{
 			"t",
+			"<Esc>",
+			"<C-\\><C-n>",
+			{ desc = "Escape to normal mode" },
+		},
+		{
+			"t",
 			"<C-\\>q",
 			"<C-\\><C-n><C-w>q<CR>",
 			{ desc = "Quit terminal" },
@@ -64,6 +70,7 @@ M.setup = function()
 			{ mode = "n", keys = "<Leader>g", desc = "+Git" },
 			{ mode = "n", keys = "<Leader>l", desc = "+Intellisense" },
 			{ mode = "n", keys = "<Leader>s", desc = "+Search/Navigation" },
+			{ mode = "n", keys = "<Leader>t", desc = "+Terminal" },
 
 			clue.gen_clues.g(),
 			clue.gen_clues.windows(),
