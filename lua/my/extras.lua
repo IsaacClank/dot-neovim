@@ -7,7 +7,6 @@ M.setup = function()
 		source = "saxon1964/neovim-tips",
 		depends = {
 			"muniftanjim/nui.nvim",
-			"OXY2DEV/markview.nvim",
 		},
 	})
 
