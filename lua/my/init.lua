@@ -44,6 +44,7 @@ M.setup = function()
 	require("my.formatting").setup()
 	require("my.completion").setup()
 	require("my.git").setup()
+	require("my.terminal").setup()
 
 	require("my.extras").setup()
 	require("my.commands").setup()
