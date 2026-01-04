@@ -38,6 +38,24 @@ M.setup = function()
 			{ desc = "Decrease height" },
 		},
 
+		-- Tab
+		{
+			"n",
+			"]<Tab>",
+			function()
+				vim.cmd([[tabnext]])
+			end,
+			{ desc = "Next tab" },
+		},
+		{
+			"n",
+			"[<Tab>",
+			function()
+				vim.cmd([[tabprevious]])
+			end,
+			{ desc = "Previous tab" },
+		},
+
 		-- Terminal bindings
 		{
 			"t",
