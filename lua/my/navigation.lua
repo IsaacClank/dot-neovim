@@ -344,7 +344,9 @@ local setup_pickers = function()
 		{
 			"n",
 			"<leader>sf",
-			mini_pick.registry.files_recent,
+			function()
+				return mini_pick.registry.files_recent({ hidden = true })
+			end,
 			{ desc = "Files" },
 		},
 		{
