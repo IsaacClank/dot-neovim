@@ -109,8 +109,8 @@ local setup_pickers = function()
 		})
 	end
 
-	mini_pick.registry.files_including_hidden = function()
-		return mini_pick.registry.files({ hidden = true })
+	mini_pick.registry.files_all = function()
+		return mini_pick.registry.files({ hidden = true, no_ignore = true })
 	end
 
 	mini_pick.registry.files_recent = function(local_opts)
@@ -352,7 +352,7 @@ local setup_pickers = function()
 		{
 			"n",
 			"<leader>sF",
-			mini_pick.registry.files_including_hidden,
+			mini_pick.registry.files_all,
 			{ desc = "Files (hidden)" },
 		},
 
