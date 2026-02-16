@@ -4,12 +4,10 @@ local M = {}
 M.setup = function()
 	mini_deps.add("catppuccin/nvim")
 	mini_deps.add("folke/tokyonight.nvim")
-	mini_deps.add("olimorris/onedarkpro.nvim")
-	mini_deps.add("rebelot/kanagawa.nvim")
-	mini_deps.add("sainnhe/everforest")
-	mini_deps.add("vague2k/vague.nvim")
-	mini_deps.add("tanvirtin/monokai.nvim")
+	mini_deps.add("loctvl842/monokai-pro.nvim")
 	mini_deps.add("mofiqul/dracula.nvim")
+	mini_deps.add("olimorris/onedarkpro.nvim")
+	mini_deps.add("vague2k/vague.nvim")
 
 	require("mini.indentscope").setup({
 		draw = {
@@ -26,14 +24,12 @@ M.setup = function()
 			-- { name = "catppuccin-macchiato" },
 			{ name = "catppuccin-mocha" },
 			{ name = "dracula" },
-			{ name = "everforest" },
-			{ name = "kanagawa" },
-			-- { name = "kanagawa-dragon" },
-			-- { name = "kanagawa-wave" },
-			{ name = "monokai" },
-			-- { name = "monokai_pro" },
-			-- { name = "monokai_ristretto" },
-			-- { name = "monokai_soda" },
+			{
+				name = "monokai-pro",
+				setup = function()
+					require("monokai-pro").setup()
+				end,
+			},
 			{ name = "onedark" },
 			-- { name = "onedark_vivid" },
 			{ name = "tokyonight" },
