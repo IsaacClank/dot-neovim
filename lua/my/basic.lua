@@ -5,7 +5,7 @@ local M = {}
 
 local setup_leap = function()
 	deps.add({
-		source = "ggandor/leap.nvim",
+		source = "https://codeberg.org/andyg/leap.nvim",
 		checkout = "main",
 	})
 
