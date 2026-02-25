@@ -32,12 +32,13 @@ local setup_auto_restore = function()
 				return stat ~= nil and stat.type == "file"
 			end)
 
-			if has_local_session and not started_with_file_arg then
-				mini_session.read()
+			if started_with_file_arg then
 				return
 			end
 
-			if vim.tbl_count(detected_sessions) > 0 then
+			if has_local_session then
+				mini_session.read()
+			elseif vim.tbl_count(detected_sessions) > 0 then
 				mini_session.select()
 			end
 		end,
