@@ -138,7 +138,12 @@ local setup_pickers = function()
 						end
 					end)
 
-					local rg_cmd = { "rg", "--color=never", "--files" }
+					local rg_cmd = {
+						"rg",
+						"--color=never",
+						"--files",
+						"--glob=!*.git/",
+					}
 					if local_opts.hidden then
 						table.insert(rg_cmd, "-.")
 					end
