@@ -11,10 +11,10 @@ local function bootstrap_mini()
 		local clone_mini_cmd = {
 			"git",
 			"clone",
-			"https://github.com/isaacclank/mini.nvim",
+			"https://github.com/nvim-mini/mini.nvim",
 			mini_path,
 		}
-		vim.system(clone_mini_cmd)
+		vim.system(clone_mini_cmd):wait()
 		vim.cmd("packadd mini.nvim | helptags ALL")
 		vim.notify("Installed mini.nvim", vim.log.levels.INFO)
 	end
