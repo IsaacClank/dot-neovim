@@ -21,6 +21,41 @@ M.setup = function()
 				},
 			},
 		},
+		sort = {
+			sorter = function(nodes)
+				table.sort(nodes, function(a, b)
+					if a.type ~= b.type then
+						if a.type == "directory" or b.type == "directory" then
+							return a.type == "directory"
+								and b.type ~= "directory"
+						else
+							return a.name < b.name
+						end
+					end
+
+					if
+						string.sub(a.name, 1, 1) == "."
+						or string.sub(b.name, 1, 1) == "."
+					then
+						return string.sub(a.name, 1, 1) == "."
+							and string.sub(b.name, 1, 1) ~= "."
+					end
+
+					if
+						string.find(a.name, b.name, 1, true)
+						or string.find(b.name, a.name, 1, true)
+					then
+						return #a.absolute_path < #b.absolute_path
+					end
+
+					if a.name == "index.ts" or b.name == "index.ts" then
+						return a.name ~= "index.ts" and b.name == "index.ts"
+					end
+
+					return a.name < b.name
+				end)
+			end,
+		},
 		on_attach = function(bufnr)
 			local api = require("nvim-tree.api")
 			local function opts(desc)
