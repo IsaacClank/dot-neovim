@@ -73,18 +73,18 @@ local setup_lsp = function()
 				vim.lsp.buf.code_action,
 				{ desc = "Code Action" },
 			},
-			{
-				"n",
-				"<Leader>ld",
-				vim.lsp.buf.definition,
-				{ desc = "Definitions" },
-			},
-			{
-				"n",
-				"<Leader>li",
-				vim.lsp.buf.implementation,
-				{ desc = "Implementations" },
-			},
+			-- {
+			-- 	"n",
+			-- 	"<Leader>ld",
+			-- 	vim.lsp.buf.definition,
+			-- 	{ desc = "Definitions" },
+			-- },
+			-- {
+			-- 	"n",
+			-- 	"<Leader>li",
+			-- 	vim.lsp.buf.implementation,
+			-- 	{ desc = "Implementations" },
+			-- },
 
 			{ "n", "<Leader>lk", vim.lsp.buf.hover, { desc = "Hover" } },
 			{
@@ -95,12 +95,12 @@ local setup_lsp = function()
 			},
 
 			{ "n", "<Leader>ln", vim.lsp.buf.rename, { desc = "Rename" } },
-			{
-				"n",
-				"<Leader>lr",
-				vim.lsp.buf.references,
-				{ desc = "References" },
-			},
+			-- {
+			-- 	"n",
+			-- 	"<Leader>lr",
+			-- 	vim.lsp.buf.references,
+			-- 	{ desc = "References" },
+			-- },
 		})
 	end)
 end

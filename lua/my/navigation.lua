@@ -1,33 +1,8 @@
-local mini_deps = require("mini.deps")
 local mini_pick = require("mini.pick")
 local mini_extra = require("mini.extra")
 local keymap = require("my.lib.keymap")
 
 local M = {}
-
-local setup_telescope = function()
-	mini_deps.add({
-		source = "nvim-telescope/telescope.nvim",
-		checkout = "0.1.8",
-		depends = {
-			"nvim-lua/plenary.nvim",
-		},
-	})
-	require("telescope").setup({
-		defaults = {
-			sorting_strategy = "ascending",
-			layout_strategy = "center",
-			layout_config = {
-				prompt_position = "top",
-			},
-		},
-		pickers = {
-			colorscheme = {
-				enable_preview = true,
-			},
-		},
-	})
-end
 
 local setup_pickers = function()
 	mini_pick.setup({
@@ -374,6 +349,30 @@ local setup_pickers = function()
 
 		{
 			"n",
+			"<Leader>ld",
+			function()
+				mini_pick.registry.lsp({ scope = "definition" })
+			end,
+			{ desc = "Definitions" },
+		},
+		{
+			"n",
+			"<Leader>li",
+			function()
+				mini_pick.registry.lsp({ scope = "implementation" })
+			end,
+			{ desc = "Implementations" },
+		},
+		{
+			"n",
+			"<Leader>lr",
+			function()
+				mini_pick.registry.lsp({ scope = "references" })
+			end,
+			{ desc = "References" },
+		},
+		{
+			"n",
 			"<Leader>ss",
 			function()
 				mini_pick.registry.lsp({ scope = "document_symbol" })
@@ -392,7 +391,6 @@ local setup_pickers = function()
 end
 
 M.setup = function()
-	setup_telescope() --- Migrating away from Telescope
 	setup_pickers()
 end
 
