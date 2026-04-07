@@ -22,7 +22,7 @@ end
 local setup_blink = function()
 	deps.add({
 		source = "saghen/blink.cmp",
-		checkout = "v1.6.0",
+		checkout = "v1.10.2",
 		depends = {
 			"mikavilpas/blink-ripgrep.nvim",
 			"rafamadriz/friendly-snippets",
@@ -34,12 +34,7 @@ local setup_blink = function()
 
 		require("blink.cmp").setup({
 			keymap = { preset = "super-tab" },
-			cmdline = { enabled = false },
-			signature = { enabled = true },
 			completion = {
-				keyword = { range = "prefix" },
-				accept = { auto_brackets = { enabled = false } },
-				documentation = { auto_show = true },
 				menu = {
 					draw = {
 						columns = {
@@ -64,7 +59,10 @@ local setup_blink = function()
 					},
 					ripgrep = {
 						module = "blink-ripgrep",
-						score_offset = -5,
+						async = true,
+						max_items = 3,
+						min_keyword_length = 5,
+						score_offset = -8,
 					},
 				},
 			},

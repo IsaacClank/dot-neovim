@@ -4,7 +4,7 @@ local M = {}
 M.setup = function()
 	deps.add({
 		source = "nvim-tree/nvim-tree.lua",
-		checkout = "v1.14.0",
+		checkout = "v1.17.0",
 		depends = { "nvim-tree/nvim-web-devicons" },
 	})
 
