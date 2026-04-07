@@ -3,36 +3,18 @@ local keymap = require("my.lib.keymap")
 
 local M = {}
 
-local setup_mason = function()
-	deps.add({
-		source = "neovim/nvim-lspconfig",
-		checkout = "v2.4.0",
-		depends = { "williamboman/mason.nvim" },
-	})
-	deps.later(function()
-		require("mason").setup({})
-	end)
-end
-
 local setup_lsp__denols = function()
-	vim.lsp.config("denols", {
-		cmd = { vim.fn.stdpath("data") .. "/mason/bin/deno", "lsp" },
-	})
+	-- vim.lsp.config("denols", {})
+	vim.lsp.enable("denols")
 end
 
 local setup_lsp__jsonls = function()
-	vim.lsp.config("jsonls", {
-		cmd = {
-			vim.fn.stdpath("data") .. "/mason/bin/vscode-json-language-server",
-			"--stdio",
-		},
-	})
+	-- vim.lsp.config("jsonls", {})
 	vim.lsp.enable("jsonls")
 end
 
 local setup_lsp__lua_ls = function()
 	vim.lsp.config("lua_ls", {
-		cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
 		on_init = function(client)
 			if client.workspace_folders then
 				local path = client.workspace_folders[1].name
@@ -73,43 +55,8 @@ local setup_lsp__lua_ls = function()
 	vim.lsp.enable("lua_ls")
 end
 
-local setup_lsp__omnisharp = function()
-	vim.lsp.config("omnisharp", {
-		cmd = {
-			vim.fn.stdpath("data") .. "/mason/bin/OmniSharp",
-			"-z",
-			"--hostPID",
-			"12345",
-			"--encoding",
-			"utf-8",
-			"--languageserver",
-		},
-		settings = {
-			FormattingOptions = {
-				EnableEditorConfigSupport = true,
-				OrganizeImports = true,
-			},
-			MsBuild = {},
-			RenameOptions = {},
-			RoslynExtensionsOptions = {
-				EnableAnalyzersSupport = true,
-				EnableImportCompletion = true,
-				EnablePackageAutoRestore = false,
-			},
-			Sdk = {
-				IncludePrereleases = true,
-			},
-		},
-	})
-end
-
 local setup_lsp__ts_ls = function()
-	vim.lsp.config("ts_ls", {
-		cmd = {
-			vim.fn.stdpath("data") .. "/mason/bin/typescript-language-server",
-			"--stdio",
-		},
-	})
+	vim.lsp.enable("ts_ls")
 end
 
 local setup_lsp = function()
@@ -117,7 +64,6 @@ local setup_lsp = function()
 		setup_lsp__denols()
 		setup_lsp__jsonls()
 		setup_lsp__lua_ls()
-		setup_lsp__omnisharp()
 		setup_lsp__ts_ls()
 
 		keymap.set_multiple({
@@ -160,7 +106,11 @@ local setup_lsp = function()
 end
 
 M.setup = function()
-	setup_mason()
+	deps.add({
+		source = "neovim/nvim-lspconfig",
+		checkout = "v2.7.0",
+	})
+
 	setup_lsp()
 end
 
