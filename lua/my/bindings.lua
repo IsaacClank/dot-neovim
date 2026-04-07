@@ -57,12 +57,12 @@ M.setup = function()
 		},
 
 		-- Terminal bindings
-		{
-			"t",
-			"<Esc>",
-			"<C-\\><C-n>",
-			{ desc = "Escape to normal mode" },
-		},
+		-- {
+		-- 	"t",
+		-- 	"<Esc>",
+		-- 	"<C-\\><C-n>",
+		-- 	{ desc = "Escape to normal mode" },
+		-- },
 		{
 			"t",
 			"<C-\\>q",
