@@ -1,5 +1,6 @@
 local mini_deps = require("mini.deps")
 local mini_pick = require("mini.pick")
+local mini_extra = require("mini.extra")
 local keymap = require("my.lib.keymap")
 
 local M = {}
@@ -39,6 +40,7 @@ local setup_pickers = function()
 			},
 		},
 	})
+	mini_extra.setup()
 
 	mini_pick.registry.commands = function()
 		local source = {
@@ -296,7 +298,9 @@ local setup_pickers = function()
 		mini_pick.start({
 			source = {
 				items = function()
-					return vim.tbl_keys(mini_pick.registry)
+					local pickers = vim.tbl_keys(mini_pick.registry)
+					table.sort(pickers)
+					return pickers
 				end,
 				choose = function(picker)
 					vim.schedule(function()
@@ -371,13 +375,17 @@ local setup_pickers = function()
 		{
 			"n",
 			"<Leader>ss",
-			"<Cmd>Telescope lsp_document_symbols<CR>",
+			function()
+				mini_pick.registry.lsp({ scope = "document_symbol" })
+			end,
 			{ desc = "Symbols" },
 		},
 		{
 			"n",
 			"<Leader>sS",
-			"<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",
+			function()
+				mini_pick.registry.lsp({ scope = "workspace_symbol_live" })
+			end,
 			{ desc = "Symbols (workspace)" },
 		},
 	})
