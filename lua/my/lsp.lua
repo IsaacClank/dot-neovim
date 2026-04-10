@@ -55,6 +55,10 @@ local setup_lsp__lua_ls = function()
 	vim.lsp.enable("lua_ls")
 end
 
+local setup_lsp__rust_analyzer = function()
+	vim.lsp.enable("rust_analyzer")
+end
+
 local setup_lsp__ts_ls = function()
 	vim.lsp.enable("ts_ls")
 end
@@ -64,6 +68,7 @@ local setup_lsp = function()
 		setup_lsp__denols()
 		setup_lsp__jsonls()
 		setup_lsp__lua_ls()
+		setup_lsp__rust_analyzer()
 		setup_lsp__ts_ls()
 
 		keymap.set_multiple({
