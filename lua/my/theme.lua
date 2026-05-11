@@ -3,11 +3,8 @@ local mini_deps = require("mini.deps")
 local M = {}
 M.setup = function()
 	mini_deps.add("catppuccin/nvim")
-	mini_deps.add("folke/tokyonight.nvim")
 	mini_deps.add("loctvl842/monokai-pro.nvim")
-	mini_deps.add("mofiqul/dracula.nvim")
 	mini_deps.add("olimorris/onedarkpro.nvim")
-	mini_deps.add("vague2k/vague.nvim")
 
 	require("mini.indentscope").setup({
 		draw = {
@@ -23,7 +20,6 @@ M.setup = function()
 			-- { name = "catppuccin-frappe" },
 			-- { name = "catppuccin-macchiato" },
 			{ name = "catppuccin-mocha" },
-			{ name = "dracula" },
 			{
 				name = "monokai-pro",
 				setup = function()
@@ -32,11 +28,6 @@ M.setup = function()
 			},
 			{ name = "onedark" },
 			-- { name = "onedark_vivid" },
-			{ name = "tokyonight" },
-			-- { name = "tokyonight-moon" },
-			-- { name = "tokyonight-night" },
-			-- { name = "tokyonight-storm" },
-			{ name = "vague" },
 		}
 		_G.themes = themes
 
