@@ -22,9 +22,22 @@ local function bootstrap_mini()
 end
 
 M.setup = function()
-	if vim.g.vscode == 1 then
+	if vim.g.vscode == 1 then -- Running using VSCode's neovim extension
 		vim.g.clipboard = vim.g.vscode_clipboard
 		return
+	elseif vim.fn.system("uname -a"):lower():find("microsoft") ~= nil then -- Running inside WSL
+		vim.g.clipboard = {
+			name = "wsl-clipboard",
+			copy = {
+				["+"] = "clip.exe",
+				["*"] = "clip.exe",
+			},
+			paste = {
+				["+"] = 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+				["*"] = 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+			},
+			cache_enabled = 0,
+		}
 	end
 
 	bootstrap_mini()
