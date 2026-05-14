@@ -2,30 +2,31 @@ local deps = require("mini.deps")
 
 local M = {}
 
-local setup_mini_completion = function()
-	deps.add({
-		source = "rafamadriz/friendly-snippets",
-	})
-
-	local mini_snippets = require("mini.snippets")
-	local mini_completion = require("mini.completion")
-
-	mini_snippets.setup({
-		snippets = {
-			mini_snippets.gen_loader.from_lang(),
-		},
-	})
-
-	mini_completion.setup({})
-end
-
 local setup_blink = function()
+	local function build_blink(params)
+		vim.notify("Building blink.cmp", vim.log.levels.INFO)
+		local obj = vim.system(
+			{ "cargo", "build", "--release" },
+			{ cwd = params.path }
+		)
+			:wait()
+		if obj.code == 0 then
+			vim.notify("Building blink.cmp done", vim.log.levels.INFO)
+		else
+			vim.notify("Building blink.cmp failed", vim.log.levels.ERROR)
+		end
+	end
+
 	deps.add({
 		source = "saghen/blink.cmp",
 		checkout = "v1.10.2",
 		depends = {
 			"mikavilpas/blink-ripgrep.nvim",
 			"rafamadriz/friendly-snippets",
+		},
+		hooks = {
+			post_install = build_blink,
+			post_checkout = build_blink,
 		},
 	})
 
