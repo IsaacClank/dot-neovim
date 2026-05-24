@@ -32,8 +32,8 @@ M.setup = function()
 			window = {
 				title = "LazyGit",
 				row = 0.035,
-				width = 0.9,
-				height = 0.9,
+				width = 1.0,
+				height = 0.75,
 			},
 		})
 
@@ -51,6 +51,13 @@ M.setup = function()
 			},
 			{ "GitStageFile", "Git add -- %" },
 			{ "GitUnstageFile", "Git restore --staged -- %" },
+		})
+
+		vim.api.nvim_create_autocmd("TermClose", {
+			pattern = "*lazygit*",
+			callback = function()
+				vim.cmd("bdelete!")
+			end,
 		})
 
 		keymap.set_multiple({
