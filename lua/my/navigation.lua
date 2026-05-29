@@ -49,6 +49,7 @@ local setup_pickers = function()
 			"--files",
 			"--glob=*.lua",
 			vim.fs.dirname(vim.env.MYVIMRC),
+			vim.fs.joinpath(vim.fn.stdpath("data"), "site", "pack", "core"),
 			vim.fs.joinpath(vim.fn.stdpath("data"), "site", "pack", "deps"),
 		}
 		return mini_pick.builtin.cli({ command = command }, {

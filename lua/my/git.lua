@@ -1,4 +1,3 @@
-local mini_deps = require("mini.deps")
 local mini_diff = require("mini.diff")
 local keymap = require("my.lib.keymap")
 local command = require("my.lib.command")
@@ -6,12 +5,11 @@ local command = require("my.lib.command")
 local M = {}
 
 M.setup = function()
-	mini_deps.add({
-		source = "kdheepak/lazygit.nvim",
-		checkout = "main",
+	vim.pack.add({
+		{ src = "https://github.com/kdheepak/lazygit.nvim" },
 	})
 
-	mini_deps.later(function()
+	vim.schedule(function()
 		require("mini.git").setup()
 
 		mini_diff.setup({
@@ -26,19 +24,28 @@ M.setup = function()
 			},
 		})
 
-		local lazygit = require("floatty").setup({
+		local lazygit = require("toggleterm.terminal").Terminal:new({
+			display_name = "LazyGit",
 			cmd = "lazygit",
-			id = "LazyGit",
-			window = {
-				title = "LazyGit",
-				row = 0.035,
-				width = 1.0,
-				height = 0.75,
+			hidden = true,
+			direction = "float",
+			close_on_exit = true,
+			float_opts = {
+				title = "center",
+				row = 5,
+				width = vim.o.columns,
+				height = 50,
 			},
 		})
 
 		command.create_multiple({
-			{ "GitView", lazygit.toggle, { desc = "Open LazyGit" } },
+			{
+				"GitView",
+				function()
+					lazygit:toggle()
+				end,
+				{ desc = "Open LazyGit" },
+			},
 			{
 				"GitStage",
 				function(opts)

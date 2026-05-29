@@ -1,5 +1,3 @@
-local deps = require("mini.deps")
-
 local M = {}
 
 local typescript_formatters = function(bufnr)
@@ -14,12 +12,14 @@ local typescript_formatters = function(bufnr)
 end
 
 M.setup = function()
-	deps.add({
-		source = "stevearc/conform.nvim",
-		checkout = "v9.1.0",
+	vim.pack.add({
+		{
+			src = "https://github.com/stevearc/conform.nvim",
+			version = vim.version.range("^9.1.0"),
+		},
 	})
 
-	deps.later(function()
+	vim.schedule(function()
 		local conform = require("conform")
 
 		conform.setup({

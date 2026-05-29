@@ -1,26 +1,5 @@
 local M = {}
 
-local function bootstrap_mini()
-	local package_path = vim.fs.joinpath(vim.fn.stdpath("data"), "site")
-
-	local mini_path =
-		vim.fs.joinpath(package_path, "pack", "deps", "start", "mini.nvim")
-	local mini_path_exists = vim.loop.fs_stat(mini_path)
-	if not mini_path_exists then
-		vim.notify("Installing mini.nvim", vim.log.levels.INFO)
-		local clone_mini_cmd = {
-			"git",
-			"clone",
-			"https://github.com/nvim-mini/mini.nvim",
-			mini_path,
-		}
-		vim.system(clone_mini_cmd):wait()
-		vim.cmd("packadd mini.nvim | helptags ALL")
-		vim.notify("Installed mini.nvim", vim.log.levels.INFO)
-	end
-	require("mini.deps").setup({ path = { package = package_path } })
-end
-
 M.setup = function()
 	if vim.g.vscode == 1 then -- Running using VSCode's neovim extension
 		vim.g.clipboard = vim.g.vscode_clipboard
@@ -40,28 +19,36 @@ M.setup = function()
 		}
 	end
 
-	bootstrap_mini()
+	vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 
 	require("my.basic").setup()
 
 	require("my.theme").setup()
-	-- require("my.dashboard").setup()
 	require("my.statusline").setup()
 	require("my.explorer").setup()
-	require("my.notification").setup()
 	require("my.session").setup()
 
 	require("my.navigation").setup()
-	require("my.treesitter").setup()
 	require("my.lsp").setup()
 	require("my.formatting").setup()
 	require("my.completion").setup()
 	require("my.git").setup()
-	require("my.terminal").setup()
 
 	require("my.extras").setup()
 	require("my.commands").setup()
 	require("my.bindings").setup()
+
+	vim.api.nvim_create_user_command("DepsClean", function()
+		local inactive_plugin_names = {}
+
+		for _, plugin in ipairs(vim.pack.get()) do
+			if not plugin.active then
+				table.insert(inactive_plugin_names, plugin.spec.name)
+			end
+		end
+
+		vim.pack.del(inactive_plugin_names)
+	end, { desc = "Remove inactive plugins" })
 end
 
 return M

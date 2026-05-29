@@ -1,11 +1,11 @@
-local deps = require("mini.deps")
-
 local M = {}
 M.setup = function()
-	deps.add({
-		source = "nvim-tree/nvim-tree.lua",
-		checkout = "v1.17.0",
-		depends = { "nvim-tree/nvim-web-devicons" },
+	vim.pack.add({
+		{
+			src = "https://github.com/nvim-tree/nvim-tree.lua",
+			version = vim.version.range("~1.17"),
+		},
+		"https://github.com/nvim-tree/nvim-web-devicons",
 	})
 
 	require("nvim-tree").setup({
@@ -21,61 +21,27 @@ M.setup = function()
 				},
 			},
 		},
-		sort = {
-			sorter = function(nodes)
-				table.sort(nodes, function(a, b)
-					if a.type ~= b.type then
-						if a.type == "directory" or b.type == "directory" then
-							return a.type == "directory"
-								and b.type ~= "directory"
-						else
-							return a.name < b.name
-						end
-					end
-
-					if
-						string.sub(a.name, 1, 1) == "."
-						or string.sub(b.name, 1, 1) == "."
-					then
-						return string.sub(a.name, 1, 1) == "."
-							and string.sub(b.name, 1, 1) ~= "."
-					end
-
-					if
-						string.find(a.name, b.name, 1, true)
-						or string.find(b.name, a.name, 1, true)
-					then
-						return #a.absolute_path < #b.absolute_path
-					end
-
-					if a.name == "index.ts" or b.name == "index.ts" then
-						return a.name ~= "index.ts" and b.name == "index.ts"
-					end
-
-					return a.name < b.name
-				end)
-			end,
-		},
-		on_attach = function(bufnr)
+		sort = { sorter = "suffix" },
+		on_attach = function(buf)
 			local api = require("nvim-tree.api")
 			local function opts(desc)
 				return {
 					desc = "nvim-tree: " .. desc,
-					buffer = bufnr,
+					buffer = buf,
 					noremap = true,
 					silent = true,
 					nowait = true,
 				}
 			end
 
-			api.config.mappings.default_on_attach(bufnr)
+			api.config.mappings.default_on_attach(buf)
 			vim.keymap.set(
 				"n",
 				"<C-s>",
 				api.node.open.horizontal,
 				opts("Open: Horizontal Split")
 			)
-			vim.keymap.del("n", "<C-x>", { buffer = bufnr })
+			vim.keymap.del("n", "<C-x>", { buffer = buf })
 		end,
 	})
 

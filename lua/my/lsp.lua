@@ -1,4 +1,3 @@
-local deps = require("mini.deps")
 local keymap = require("my.lib.keymap")
 
 local M = {}
@@ -64,7 +63,7 @@ local setup_lsp__ts_ls = function()
 end
 
 local setup_lsp = function()
-	deps.later(function()
+	vim.schedule(function()
 		setup_lsp__denols()
 		setup_lsp__jsonls()
 		setup_lsp__lua_ls()
@@ -111,9 +110,11 @@ local setup_lsp = function()
 end
 
 M.setup = function()
-	deps.add({
-		source = "neovim/nvim-lspconfig",
-		checkout = "v2.7.0",
+	vim.pack.add({
+		{
+			src = "https://github.com/neovim/nvim-lspconfig",
+			version = vim.version.range("^2.7.0"),
+		},
 	})
 
 	setup_lsp()

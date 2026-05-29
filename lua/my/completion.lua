@@ -1,5 +1,3 @@
-local deps = require("mini.deps")
-
 local M = {}
 
 local setup_blink = function()
@@ -17,20 +15,32 @@ local setup_blink = function()
 		end
 	end
 
-	deps.add({
-		source = "saghen/blink.cmp",
-		checkout = "v1.10.2",
-		depends = {
-			"mikavilpas/blink-ripgrep.nvim",
-			"rafamadriz/friendly-snippets",
+	vim.pack.add({
+		{
+			src = "https://github.com/saghen/blink.cmp",
+			version = vim.version.range("^1.10.2"),
+			hooks = {
+				post_install = build_blink,
+				post_checkout = build_blink,
+			},
 		},
-		hooks = {
-			post_install = build_blink,
-			post_checkout = build_blink,
-		},
+		"https://github.com/mikavilpas/blink-ripgrep.nvim",
+		"https://github.com/rafamadriz/friendly-snippets",
 	})
 
-	deps.later(function()
+	vim.api.nvim_create_autocmd("PackChanged", {
+		callback = function(event)
+			local name, kind = event.data.spec.name, event.data.kind
+			if
+				name == "blink.cmp"
+				and (kind == "install" or kind == "update")
+			then
+				build_blink()
+			end
+		end,
+	})
+
+	vim.schedule(function()
 		vim.api.nvim_set_hl(0, "BlinkCmpLabelMatch", { link = "PmenuMatch" })
 
 		require("blink.cmp").setup({

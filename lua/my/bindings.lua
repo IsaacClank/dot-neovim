@@ -1,75 +1,45 @@
 local clue = require("mini.clue")
-local keymap = require("my.lib.keymap")
 
 local M = {}
 
 M.setup = function()
-	keymap.set_multiple({
-		{
-			"n",
-			"<M-Up>",
-			function()
-				vim.cmd([[resize +5]])
-			end,
-			{ desc = "Increase height" },
-		},
-		{
-			"n",
-			"<M-Down>",
-			function()
-				vim.cmd([[resize -5]])
-			end,
-			{ desc = "Decrease height" },
-		},
-		{
-			"n",
-			"<M-Right>",
-			function()
-				vim.cmd([[vertical resize +5]])
-			end,
-			{ desc = "Increase height" },
-		},
-		{
-			"n",
-			"<M-Left>",
-			function()
-				vim.cmd([[vertical resize -5]])
-			end,
-			{ desc = "Decrease height" },
-		},
+	vim.api.nvim_set_keymap(
+		"n",
+		"<M-Up>",
+		":resize +5<CR>",
+		{ desc = "Increase height" }
+	)
+	vim.api.nvim_set_keymap(
+		"n",
+		"<M-Down>",
+		":resize -5<CR>",
+		{ desc = "Decrease height" }
+	)
+	vim.api.nvim_set_keymap(
+		"n",
+		"<M-Left>",
+		":vertical resize +5<CR>",
+		{ desc = "Increase width" }
+	)
+	vim.api.nvim_set_keymap(
+		"n",
+		"<M-Right>",
+		":vertical resize -5<CR>",
+		{ desc = "Decrease width" }
+	)
 
-		-- Tab
-		{
-			"n",
-			"]<Tab>",
-			function()
-				vim.cmd([[tabnext]])
-			end,
-			{ desc = "Next tab" },
-		},
-		{
-			"n",
-			"[<Tab>",
-			function()
-				vim.cmd([[tabprevious]])
-			end,
-			{ desc = "Previous tab" },
-		},
-
-		-- Terminal bindings
-		-- {
-		-- 	"t",
-		-- 	"<Esc>",
-		-- 	"<C-\\><C-n>",
-		-- 	{ desc = "Escape to normal mode" },
-		-- },
-		{
-			"t",
-			"<C-\\>q",
-			"<C-\\><C-n><C-w>q<CR>",
-			{ desc = "Quit terminal" },
-		},
-	})
+	vim.api.nvim_set_keymap(
+		"n",
+		"]<Tab>",
+		":tabnext<CR>",
+		{ desc = "Next tab" }
+	)
+	vim.api.nvim_set_keymap(
+		"n",
+		"[<Tab>",
+		":tabprevious<CR>",
+		{ desc = "Previous tab" }
+	)
 
 	clue.setup({
 		triggers = {
