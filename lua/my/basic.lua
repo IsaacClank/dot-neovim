@@ -30,7 +30,7 @@ local setup_terminal = function()
 		float_opts = {
 			border = "curved",
 			height = 30,
-			width = vim.o.columns * 0.45,
+			width = math.floor(vim.o.columns * 0.45),
 			winblend = 10,
 		},
 		on_open = function(term)
