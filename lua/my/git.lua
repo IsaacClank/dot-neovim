@@ -23,6 +23,13 @@ local function setup_lazygit()
 		vim.api.nvim_create_user_command("GitView", function()
 			lazygit:toggle()
 		end, { desc = "Open LazyGit" })
+
+		vim.keymap.set(
+			"n",
+			"<Leader>gg",
+			"<Cmd>GitView<CR>",
+			{ desc = "Toggle Git view (LazyGit)" }
+		)
 	end)
 end
 
@@ -52,20 +59,9 @@ local function setup_minidiff()
 			})
 		end, { desc = "Stage range", range = "%" })
 		vim.api.nvim_create_user_command(
-			"GitStageFile",
-			"Git add -- %",
-			{ desc = "Stage file" }
-		)
-		vim.api.nvim_create_user_command(
 			"GitUnstageFile",
-			"Git restore --staged -- %",
+			"silent !git restore --staged -- %",
 			{ desc = "Unstage file" }
-		)
-		vim.keymap.set(
-			"n",
-			"<Leader>gg",
-			":GitView<CR>",
-			{ desc = "Toggle Git view (LazyGit)" }
 		)
 
 		vim.keymap.set(
@@ -77,44 +73,40 @@ local function setup_minidiff()
 
 		vim.keymap.set(
 			"n",
-			"<Leader>gs",
-			":GitStageFile<CR>",
-			{ desc = "Stage file" }
-		)
-
-		vim.keymap.set(
-			"x",
-			"<Leader>gs",
-			":'<,'>GitStage<CR>",
-			{ desc = "Stage selected hunk" }
-		)
-
-		vim.keymap.set(
-			"n",
 			"]g",
 			":lua MiniDiff.goto_hunk 'next'<CR>",
 			{ desc = "Next hunk" }
 		)
-
 		vim.keymap.set(
 			"n",
 			"[g",
 			":lua MiniDiff.goto_hunk 'prev'<CR>",
 			{ desc = "Previous hunk" }
 		)
-
 		vim.keymap.set(
 			"n",
 			"]G",
 			":lua MiniDiff.goto_hunk 'last'<CR>",
 			{ desc = "Last hunk" }
 		)
-
 		vim.keymap.set(
 			"n",
 			"[G",
 			":lua MiniDiff.goto_hunk 'first'<CR>",
 			{ desc = "First hunk" }
+		)
+
+		vim.keymap.set(
+			{ "n", "x" },
+			"<Leader>gs",
+			":GitStage<CR>",
+			{ desc = "Stage" }
+		)
+		vim.keymap.set(
+			"n",
+			"<Leader>gS",
+			":GitUnstageFile<CR>",
+			{ desc = "Unstage" }
 		)
 	end)
 end
