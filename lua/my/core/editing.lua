@@ -8,7 +8,6 @@ function mod.setup()
 		"https://github.com/nvim-mini/mini.surround",
 		"https://github.com/nvim-mini/mini.splitjoin",
 
-		"https://github.com/nvim-mini/mini.ai",
 		"https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
 	})
 
@@ -19,20 +18,17 @@ function mod.setup()
 		require("mini.pairs").setup({})
 		require("mini.surround").setup({})
 		require("mini.splitjoin").setup({})
+		require("nvim-treesitter-textobjects").setup({})
 
-		local mini_ai = require("mini.ai")
-		mini_ai.setup({
-			custom_textobjects = {
-				F = mini_ai.gen_spec.treesitter({
-					a = "@function.outer",
-					i = "@function.inner",
-				}),
-				o = mini_ai.gen_spec.treesitter({
-					a = { "@conditional.outer", "@loop.outer" },
-					i = { "@conditional.inner", "@loop.inner" },
-				}),
-			},
-		})
+		local select_textobject =
+			require("nvim-treesitter-textobjects.select").select_textobject
+
+		vim.keymap.set({ "x", "o" }, "af", function()
+			select_textobject("@function.outer", "textobjects")
+		end)
+		vim.keymap.set({ "x", "o" }, "if", function()
+			select_textobject("@function.inner", "textobjects")
+		end)
 	end)
 end
 
