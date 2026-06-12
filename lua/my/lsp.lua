@@ -1,14 +1,8 @@
-local keymap = require("my.lib.keymap")
-
-local M = {}
-
 local setup_lsp__denols = function()
-	-- vim.lsp.config("denols", {})
 	vim.lsp.enable("denols")
 end
 
 local setup_lsp__jsonls = function()
-	-- vim.lsp.config("jsonls", {})
 	vim.lsp.enable("jsonls")
 end
 
@@ -39,11 +33,18 @@ local setup_lsp__lua_ls = function()
 					},
 					workspace = {
 						checkThirdParty = false,
-						library = {
-							vim.env.VIMRUNTIME,
-							"${3rd}/luv/library",
-							"${3rd}/busted/library",
-						},
+						library = vim.tbl_extend(
+							"keep",
+							{ vim.env.VIMRUNTIME },
+							vim.api.nvim_get_runtime_file(
+								"lua/lspconfig",
+								false
+							)
+							-- vim.api.nvim_get_runtime_file(
+							-- 	"pack/**/{start,opt}/**/{lua,plugin}",
+							-- 	true
+							-- )
+						),
 					},
 				})
 		end,
@@ -62,54 +63,8 @@ local setup_lsp__ts_ls = function()
 	vim.lsp.enable("ts_ls")
 end
 
-local setup_lsp = function()
-	vim.schedule(function()
-		setup_lsp__denols()
-		setup_lsp__jsonls()
-		setup_lsp__lua_ls()
-		setup_lsp__rust_analyzer()
-		setup_lsp__ts_ls()
-
-		keymap.set_multiple({
-			{
-				"n",
-				"<Leader>la",
-				vim.lsp.buf.code_action,
-				{ desc = "Code Action" },
-			},
-			-- {
-			-- 	"n",
-			-- 	"<Leader>ld",
-			-- 	vim.lsp.buf.definition,
-			-- 	{ desc = "Definitions" },
-			-- },
-			-- {
-			-- 	"n",
-			-- 	"<Leader>li",
-			-- 	vim.lsp.buf.implementation,
-			-- 	{ desc = "Implementations" },
-			-- },
-
-			{ "n", "<Leader>lk", vim.lsp.buf.hover, { desc = "Hover" } },
-			{
-				"n",
-				"<Leader>lK",
-				vim.diagnostic.open_float,
-				{ desc = "Hover diagnostic" },
-			},
-
-			{ "n", "<Leader>ln", vim.lsp.buf.rename, { desc = "Rename" } },
-			-- {
-			-- 	"n",
-			-- 	"<Leader>lr",
-			-- 	vim.lsp.buf.references,
-			-- 	{ desc = "References" },
-			-- },
-		})
-	end)
-end
-
-M.setup = function()
+local mod = {}
+mod.setup = function()
 	vim.pack.add({
 		{
 			src = "https://github.com/neovim/nvim-lspconfig",
@@ -117,7 +72,34 @@ M.setup = function()
 		},
 	})
 
-	setup_lsp()
-end
+	vim.schedule(function()
+		setup_lsp__denols()
+		setup_lsp__jsonls()
+		setup_lsp__lua_ls()
+		setup_lsp__rust_analyzer()
+		setup_lsp__ts_ls()
 
-return M
+		vim.keymap.set(
+			"n",
+			"<Leader>la",
+			vim.lsp.buf.code_action,
+			{ desc = "Code Action" }
+		)
+
+		vim.keymap.set("n", "<Leader>lk", vim.lsp.buf.hover, { desc = "Hover" })
+		vim.keymap.set(
+			"n",
+			"<Leader>lK",
+			vim.diagnostic.open_float,
+			{ desc = "Hover diagnostic" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"<Leader>ln",
+			vim.lsp.buf.rename,
+			{ desc = "Rename" }
+		)
+	end)
+end
+return mod

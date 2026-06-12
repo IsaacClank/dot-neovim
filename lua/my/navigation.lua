@@ -1,10 +1,16 @@
-local mini_pick = require("mini.pick")
-local mini_extra = require("mini.extra")
-local keymap = require("my.lib.keymap")
+local mod = {}
 
-local M = {}
+function mod.setup()
+	vim.pack.add({
+		"https://github.com/nvim-mini/mini.pick",
+		"https://github.com/nvim-mini/mini.extra",
 
-local setup_pickers = function()
+		"https://github.com/nvim-lua/plenary.nvim",
+	})
+
+	local mini_pick = require("mini.pick")
+	local mini_extra = require("mini.extra")
+
 	mini_pick.setup({
 		mappings = {
 			execute = {
@@ -293,9 +299,7 @@ local setup_pickers = function()
 		local result = mini_pick.start({
 			source = {
 				name = "themes",
-				items = vim.tbl_map(function(theme)
-					return theme.name
-				end, _G.themes),
+				items = _G.themes,
 				preview = function(buf, theme)
 					vim.cmd.colorscheme(theme)
 
@@ -314,85 +318,71 @@ local setup_pickers = function()
 		end
 	end
 
-	keymap.set_multiple({
-		{
-			"n",
-			"<Leader>s:",
-			mini_pick.registry.commands,
-			{ desc = "Commands" },
-		},
-		{ "n", "<leader>s?", mini_pick.registry.help, { desc = "Help" } },
-		{ "n", "<Leader>sp", mini_pick.registry.pickers, { desc = "Pickers" } },
+	vim.keymap.set(
+		"n",
+		"<Leader>s:",
+		mini_pick.registry.commands,
+		{ desc = "Commands" }
+	)
 
-		{ "n", "<leader>sb", mini_pick.registry.buffers, { desc = "Buffers" } },
+	vim.keymap.set(
+		"n",
+		"<leader>s?",
+		mini_pick.registry.help,
+		{ desc = "Help" }
+	)
 
-		{
-			"n",
-			"<leader>sf",
-			function()
-				return mini_pick.registry.files_recent({ hidden = true })
-			end,
-			{ desc = "Files" },
-		},
-		{
-			"n",
-			"<leader>sF",
-			mini_pick.registry.files_all,
-			{ desc = "Files (hidden)" },
-		},
+	vim.keymap.set(
+		"n",
+		"<Leader>sp",
+		mini_pick.registry.pickers,
+		{ desc = "Pickers" }
+	)
 
-		{
-			"n",
-			"<leader>sg",
-			mini_pick.registry.grep_live,
-			{ desc = "Grep (live)" },
-		},
+	vim.keymap.set(
+		"n",
+		"<leader>sb",
+		mini_pick.registry.buffers,
+		{ desc = "Buffers" }
+	)
 
-		{
-			"n",
-			"<Leader>ld",
-			function()
-				mini_pick.registry.lsp({ scope = "definition" })
-			end,
-			{ desc = "Definitions" },
-		},
-		{
-			"n",
-			"<Leader>li",
-			function()
-				mini_pick.registry.lsp({ scope = "implementation" })
-			end,
-			{ desc = "Implementations" },
-		},
-		{
-			"n",
-			"<Leader>lr",
-			function()
-				mini_pick.registry.lsp({ scope = "references" })
-			end,
-			{ desc = "References" },
-		},
-		{
-			"n",
-			"<Leader>ss",
-			function()
-				mini_pick.registry.lsp({ scope = "document_symbol" })
-			end,
-			{ desc = "Symbols" },
-		},
-		{
-			"n",
-			"<Leader>sS",
-			function()
-				mini_pick.registry.lsp({ scope = "workspace_symbol_live" })
-			end,
-			{ desc = "Symbols (workspace)" },
-		},
-	})
+	vim.keymap.set("n", "<leader>sf", function()
+		return mini_pick.registry.files_recent({ hidden = true })
+	end, { desc = "Files" })
+
+	vim.keymap.set(
+		"n",
+		"<leader>sF",
+		mini_pick.registry.files_all,
+		{ desc = "Files (hidden)" }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>sg",
+		mini_pick.registry.grep_live,
+		{ desc = "Grep (live)" }
+	)
+
+	vim.keymap.set("n", "<Leader>ld", function()
+		mini_pick.registry.lsp({ scope = "definition" })
+	end, { desc = "Definitions" })
+
+	vim.keymap.set("n", "<Leader>li", function()
+		mini_pick.registry.lsp({ scope = "implementation" })
+	end, { desc = "Implementations" })
+
+	vim.keymap.set("n", "<Leader>lr", function()
+		mini_pick.registry.lsp({ scope = "references" })
+	end, { desc = "References" })
+
+	vim.keymap.set("n", "<Leader>ss", function()
+		mini_pick.registry.lsp({ scope = "document_symbol" })
+	end, { desc = "Symbols" })
+
+	vim.keymap.set("n", "<Leader>sS", function()
+		mini_pick.registry.lsp({ scope = "workspace_symbol_live" })
+	end, { desc = "Symbols (workspace)" })
 end
 
-M.setup = function()
-	setup_pickers()
-end
-
-return M
+return mod

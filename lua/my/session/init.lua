@@ -1,9 +1,13 @@
-local mini_session = require("mini.sessions")
-local mini_session_recent_files = require("my.session.plugin.recent_files")
-local mini_session_auto_restore = require("my.session.plugin.auto_restore")
-
 local M = {}
 M.setup = function()
+	vim.pack.add({
+		"https://github.com/nvim-mini/mini.sessions",
+	})
+
+	local mini_session = require("mini.sessions")
+	local mini_session_recent_files = require("my.session.plugin.recent_files")
+	local mini_session_auto_restore = require("my.session.plugin.auto_restore")
+
 	mini_session.setup({
 		file = ".vim-session",
 		hooks = {
@@ -29,5 +33,17 @@ M.setup = function()
 	vim.api.nvim_create_user_command("SessionSelect", function()
 		mini_session.select()
 	end, { desc = "Select session" })
+
+	vim.api.nvim_create_user_command("SessionRestart", function()
+		mini_session.restart()
+	end, { desc = "Restore session" })
+
+	vim.keymap.set(
+		"n",
+		"<Leader>or",
+		"<Cmd>SessionRestart<CR>",
+		{ desc = "Restart" }
+	)
+	vim.keymap.set("n", "<Leader>os", "<Cmd>SessionSave<CR>", { desc = "Save" })
 end
 return M

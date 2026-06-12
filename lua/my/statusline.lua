@@ -1,5 +1,3 @@
-local M = {}
-
 local conditionals = {}
 
 conditionals.buf_readonly = function()
@@ -22,7 +20,8 @@ conditionals.buf_not_in_cwd = function()
 	return not conditionals.buf_in_cwd()
 end
 
-M.setup = function()
+local mod = {}
+mod.setup = function()
 	vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 	require("lualine").setup({
 		options = {
@@ -33,20 +32,20 @@ M.setup = function()
 				{ "mode", cond = conditionals.buf_not_readonly },
 			},
 			lualine_b = {
-				{ "branch", cond = conditionals.buf_in_cwd },
-				{ "diff", cond = conditionals.buf_in_cwd },
-				{ "diagnostics" },
+				{ "filename", path = 1 },
+				"location",
+				{ "diagnostics", cond = conditionals.buf_in_cwd },
 			},
 			lualine_c = { "searchcount" },
-			lualine_x = { "filename", "location", "filetype" },
-			lualine_y = {},
+
+			lualine_x = {
+				{ "diff", cond = conditionals.buf_in_cwd },
+				{ "branch", cond = conditionals.buf_in_cwd },
+			},
+			lualine_y = { "lsp_status" },
 			lualine_z = {},
 		},
 		extensions = { "toggleterm" },
 	})
-
-	-- require("mini.statusline").setup({
-	-- 	use_icons = true,
-	-- })
 end
-return M
+return mod

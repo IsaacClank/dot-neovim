@@ -1,29 +1,11 @@
-local mini_diff = require("mini.diff")
-local keymap = require("my.lib.keymap")
-local command = require("my.lib.command")
-
 local M = {}
 
-M.setup = function()
+local function setup_lazygit()
 	vim.pack.add({
 		{ src = "https://github.com/kdheepak/lazygit.nvim" },
 	})
 
 	vim.schedule(function()
-		require("mini.git").setup()
-
-		mini_diff.setup({
-			mappings = {
-				apply = "",
-				reset = "",
-				textobject = "",
-				goto_first = "",
-				goto_last = "",
-				goto_next = "",
-				goto_prev = "",
-			},
-		})
-
 		local lazygit = require("toggleterm.terminal").Terminal:new({
 			display_name = "LazyGit",
 			cmd = "lazygit",
@@ -38,89 +20,108 @@ M.setup = function()
 			},
 		})
 
-		command.create_multiple({
-			{
-				"GitView",
-				function()
-					lazygit:toggle()
-				end,
-				{ desc = "Open LazyGit" },
-			},
-			{
-				"GitStage",
-				function(opts)
-					mini_diff.do_hunks(0, "apply", {
-						line_start = opts.line1,
-						line_end = opts.line2,
-					})
-				end,
-				{ range = "%" },
-			},
-			{ "GitStageFile", "Git add -- %" },
-			{ "GitUnstageFile", "Git restore --staged -- %" },
-		})
-
-		vim.api.nvim_create_autocmd("TermClose", {
-			pattern = "*lazygit*",
-			callback = function()
-				vim.cmd("bdelete!")
-			end,
-		})
-
-		keymap.set_multiple({
-			{
-				"n",
-				"<Leader>gg",
-				":GitView<CR>",
-				{ desc = "Toggle Git view (LazyGit)" },
-			},
-
-			{
-				"n",
-				"<Leader>gd",
-				":lua MiniDiff.toggle_overlay()<CR>",
-				{ desc = "Toggle diff overlay" },
-			},
-
-			{
-				"n",
-				"<Leader>gs",
-				":GitStageFile<CR>",
-				{ desc = "Stage file" },
-			},
-			{
-				"x",
-				"<Leader>gs",
-				":'<,'>GitStage<CR>",
-				{ desc = "Stage selected hunk" },
-			},
-
-			{
-				"n",
-				"]g",
-				":lua MiniDiff.goto_hunk 'next'<CR>",
-				{ desc = "Next hunk" },
-			},
-			{
-				"n",
-				"[g",
-				":lua MiniDiff.goto_hunk 'prev'<CR>",
-				{ desc = "Previous hunk" },
-			},
-			{
-				"n",
-				"]G",
-				":lua MiniDiff.goto_hunk 'last'<CR>",
-				{ desc = "Last hunk" },
-			},
-			{
-				"n",
-				"[G",
-				":lua MiniDiff.goto_hunk 'first'<CR>",
-				{ desc = "First hunk" },
-			},
-		})
+		vim.api.nvim_create_user_command("GitView", function()
+			lazygit:toggle()
+		end, { desc = "Open LazyGit" })
 	end)
+end
+
+local function setup_minidiff()
+	vim.pack.add({
+		{ src = "https://github.com/nvim-mini/mini.diff" },
+	})
+
+	vim.schedule(function()
+		local mini_diff = require("mini.diff")
+		mini_diff.setup({
+			mappings = {
+				apply = "",
+				reset = "",
+				textobject = "",
+				goto_first = "",
+				goto_last = "",
+				goto_next = "",
+				goto_prev = "",
+			},
+		})
+
+		vim.api.nvim_create_user_command("GitStage", function(opts)
+			mini_diff.do_hunks(0, "apply", {
+				line_start = opts.line1,
+				line_end = opts.line2,
+			})
+		end, { desc = "Stage range", range = "%" })
+		vim.api.nvim_create_user_command(
+			"GitStageFile",
+			"Git add -- %",
+			{ desc = "Stage file" }
+		)
+		vim.api.nvim_create_user_command(
+			"GitUnstageFile",
+			"Git restore --staged -- %",
+			{ desc = "Unstage file" }
+		)
+		vim.keymap.set(
+			"n",
+			"<Leader>gg",
+			":GitView<CR>",
+			{ desc = "Toggle Git view (LazyGit)" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"<Leader>gd",
+			":lua MiniDiff.toggle_overlay()<CR>",
+			{ desc = "Toggle diff overlay" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"<Leader>gs",
+			":GitStageFile<CR>",
+			{ desc = "Stage file" }
+		)
+
+		vim.keymap.set(
+			"x",
+			"<Leader>gs",
+			":'<,'>GitStage<CR>",
+			{ desc = "Stage selected hunk" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"]g",
+			":lua MiniDiff.goto_hunk 'next'<CR>",
+			{ desc = "Next hunk" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"[g",
+			":lua MiniDiff.goto_hunk 'prev'<CR>",
+			{ desc = "Previous hunk" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"]G",
+			":lua MiniDiff.goto_hunk 'last'<CR>",
+			{ desc = "Last hunk" }
+		)
+
+		vim.keymap.set(
+			"n",
+			"[G",
+			":lua MiniDiff.goto_hunk 'first'<CR>",
+			{ desc = "First hunk" }
+		)
+	end)
+end
+
+M.setup = function()
+	setup_lazygit()
+	setup_minidiff()
 end
 
 return M

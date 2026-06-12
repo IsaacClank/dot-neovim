@@ -1,10 +1,14 @@
-local M = {}
+local mod = {}
 
-M.setup = function()
-	if vim.g.vscode == 1 then -- Running using VSCode's neovim extension
+function mod.setup()
+	local is_vscode = vim.g.vscode == 1
+	if is_vscode then
 		vim.g.clipboard = vim.g.vscode_clipboard
 		return
-	elseif vim.fn.system("uname -a"):lower():find("microsoft") ~= nil then -- Running inside WSL
+	end
+
+	local is_wsl = vim.fn.system("uname -a"):lower():find("microsoft") ~= nil
+	if is_wsl then
 		vim.g.clipboard = {
 			name = "wsl-clipboard",
 			copy = {
@@ -19,11 +23,12 @@ M.setup = function()
 		}
 	end
 
-	vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
+	require("my.core.ui").setup()
+	require("my.core.options").setup()
+	require("my.core.editing").setup()
+	require("my.core.pack").setup()
+	require("my.core.terminal").setup()
 
-	require("my.basic").setup()
-
-	require("my.theme").setup()
 	require("my.statusline").setup()
 	require("my.explorer").setup()
 	require("my.session").setup()
@@ -34,21 +39,7 @@ M.setup = function()
 	require("my.completion").setup()
 	require("my.git").setup()
 
-	require("my.extras").setup()
-	require("my.commands").setup()
 	require("my.bindings").setup()
-
-	vim.api.nvim_create_user_command("DepsClean", function()
-		local inactive_plugin_names = {}
-
-		for _, plugin in ipairs(vim.pack.get()) do
-			if not plugin.active then
-				table.insert(inactive_plugin_names, plugin.spec.name)
-			end
-		end
-
-		vim.pack.del(inactive_plugin_names)
-	end, { desc = "Remove inactive plugins" })
 end
 
-return M
+return mod

@@ -3,7 +3,7 @@ M.setup = function()
 	vim.pack.add({
 		{
 			src = "https://github.com/nvim-tree/nvim-tree.lua",
-			version = vim.version.range("~1.17"),
+			version = vim.version.range("^1.17"),
 		},
 		"https://github.com/nvim-tree/nvim-web-devicons",
 	})

@@ -1,5 +1,3 @@
-local M = {}
-
 local setup_blink = function()
 	local function build_blink(params)
 		vim.notify("Building blink.cmp", vim.log.levels.INFO)
@@ -81,12 +79,8 @@ local setup_blink = function()
 	end)
 end
 
-M.setup = function()
-	vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
-	vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
-	vim.o.complete = ".,w,b,u"
+local mod = {}
+mod.setup = function()
 	setup_blink()
-	-- setup_mini_completion()
 end
-
-return M
+return mod

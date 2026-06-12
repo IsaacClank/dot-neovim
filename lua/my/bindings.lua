@@ -1,57 +1,28 @@
-local clue = require("mini.clue")
+local mod = {}
 
-local M = {}
+mod.setup = function()
+	vim.pack.add({ "https://github.com/nvim-mini/mini.clue" })
 
-M.setup = function()
-	vim.api.nvim_set_keymap(
-		"n",
-		"<M-Up>",
-		":resize +5<CR>",
-		{ desc = "Increase height" }
-	)
-	vim.api.nvim_set_keymap(
-		"n",
-		"<M-Down>",
-		":resize -5<CR>",
-		{ desc = "Decrease height" }
-	)
-	vim.api.nvim_set_keymap(
-		"n",
-		"<M-Left>",
-		":vertical resize +5<CR>",
-		{ desc = "Increase width" }
-	)
-	vim.api.nvim_set_keymap(
-		"n",
-		"<M-Right>",
-		":vertical resize -5<CR>",
-		{ desc = "Decrease width" }
-	)
+	local clue = require("mini.clue")
 
-	vim.api.nvim_set_keymap(
-		"n",
-		"]<Tab>",
-		":tabnext<CR>",
-		{ desc = "Next tab" }
-	)
-	vim.api.nvim_set_keymap(
-		"n",
-		"[<Tab>",
-		":tabprevious<CR>",
-		{ desc = "Previous tab" }
-	)
+	vim.keymap.set("n", "<Leader>pn", "<Cmd>new<CR>", { desc = "New pane" })
+	vim.keymap.set("n", "<Leader>pr>", "<C-w>>", { desc = "Increase width" })
+	vim.keymap.set("n", "<Leader>pr<", "<C-w><", { desc = "Decrease width" })
+	vim.keymap.set("n", "<Leader>pr+", "<C-w>+", { desc = "Increase heigth" })
+	vim.keymap.set("n", "<Leader>pr-", "<C-w>-", { desc = "Decrease height" })
+	vim.keymap.set("n", "<Leader>pr=", "<C-w>=", { desc = "Equalize" })
 
 	clue.setup({
 		triggers = {
 			{ mode = "n", keys = "<Leader>" },
-			{ mode = "x", keys = "<Leader>" },
 			{ mode = "n", keys = "g" },
 			{ mode = "n", keys = "z" },
 			{ mode = "n", keys = "<C-w>" },
-			{ mode = "n", keys = [[\]] },
-			{ mode = "i", keys = "<C-x>" },
 			{ mode = "n", keys = "[" },
 			{ mode = "n", keys = "]" },
+			{ mode = "n", keys = [[\]] },
+
+			{ mode = "i", keys = "<C-x>" },
 		},
 		clues = {
 			{ mode = "n", keys = "<Leader>e", desc = "+Explorer" },
@@ -60,14 +31,23 @@ M.setup = function()
 			{ mode = "n", keys = "<Leader>s", desc = "+Search/Navigation" },
 			{ mode = "n", keys = "<Leader>t", desc = "+Terminal" },
 
+			{ mode = "n", keys = "<Leader>p", desc = "+Pane" },
+			{ mode = "n", keys = "<Leader>pr", desc = "+Resize" },
+			{ mode = "n", keys = "<Leader>pr>", postkeys = "<Leader>pr" },
+			{ mode = "n", keys = "<Leader>pr<", postkeys = "<Leader>pr" },
+			{ mode = "n", keys = "<Leader>pr+", postkeys = "<Leader>pr" },
+			{ mode = "n", keys = "<Leader>pr-", postkeys = "<Leader>pr" },
+
+			{ mode = "n", keys = "<Leader>o", desc = "+Session" },
+
+			clue.gen_clues.builtin_completion(),
 			clue.gen_clues.g(),
+			clue.gen_clues.square_brackets(),
 			clue.gen_clues.windows(),
 			clue.gen_clues.z(),
-			clue.gen_clues.builtin_completion(),
-			clue.gen_clues.square_brackets(),
 		},
 		window = {
-			delay = 350,
+			delay = 250,
 			config = {
 				width = "auto",
 			},
@@ -75,4 +55,4 @@ M.setup = function()
 	})
 end
 
-return M
+return mod
