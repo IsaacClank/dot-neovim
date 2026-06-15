@@ -13,7 +13,7 @@ local function setup_lazygit()
 			direction = "float",
 			close_on_exit = true,
 			float_opts = {
-				title = "center",
+				title_pos = "center",
 				row = 5,
 				width = vim.o.columns,
 				height = 50,

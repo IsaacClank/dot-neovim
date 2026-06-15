@@ -39,6 +39,8 @@ function mod.setup()
 	require("my.completion").setup()
 	require("my.git").setup()
 
+	require("my.agentic").setup()
+
 	require("my.bindings").setup()
 end
 
