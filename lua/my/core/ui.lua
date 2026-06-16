@@ -49,7 +49,7 @@ local function setup_themes()
 		"https://github.com/shaunsingh/nord.nvim",
 	})
 	_G.themes = { "dracula", "gruvbox", "nord", "onedark" }
-	vim.cmd([[colorscheme gruvbox]])
+	-- vim.cmd([[colorscheme gruvbox]])
 end
 
 local mod = {}
