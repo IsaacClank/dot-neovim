@@ -8,11 +8,15 @@ mod.setup = function()
 		close_on_exit = true,
 		float_opts = {
 			title_pos = "center",
-			row = 1,
+			row = 0,
 			col = 0,
-			width = math.floor(vim.o.columns * 0.33),
-			height = math.floor(vim.o.lines * 0.93),
-			winblend = 10,
+			width = function()
+				return math.floor(vim.o.columns * 0.33)
+			end,
+			height = function()
+				return math.floor(vim.o.lines * 0.90)
+			end,
+			winblend = 5,
 		},
 	})
 
