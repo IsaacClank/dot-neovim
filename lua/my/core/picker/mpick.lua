@@ -84,7 +84,7 @@ mod.setup = function()
 		---@field path_old string|nil
 		---@field git_status_tag string
 		---@field text string
-		mini_pick.registry.files_git_changes = function()
+		mini_pick.registry.git_status = function()
 			---@param output table<any, string>
 			---@return table<Item>
 			local parse_command_output = function(output)
@@ -100,23 +100,22 @@ mod.setup = function()
 						local path = nil
 						local path_old = nil
 						local text = nil
-						local git_status_tag = string.format(
-							"[%s]",
-							vim.trim(string.sub(line, 1, 3))
-						)
+						local git_status_tag =
+							string.sub(line, 1, 3):gsub("%s+$", "") -- Trim end
 
-						if git_status_tag == "[R]" then
+						if git_status_tag == "R" then
 							_, path_old, path =
 								line:match("^(%a)%s+(%S+)%s+%->%s+(%S+)$")
 							text = string.format(
-								"%s -> %s %s",
+								"%-2s %s -> %s",
+								git_status_tag,
 								path_old,
-								path,
-								git_status_tag
+								path
 							)
 						else
 							path = vim.trim(string.sub(line, 4))
-							text = string.format("%s %s", path, git_status_tag)
+							text =
+								string.format("%-2s %s", git_status_tag, path)
 						end
 
 						return {
@@ -135,47 +134,71 @@ mod.setup = function()
 			---@param query string
 			local custom_show = function(buf_id, items, query)
 				mini_pick.default_show(buf_id, items, query, {
-					show_icons = true,
+					show_icons = false,
 				})
 
 				local ns_id = vim.api.nvim_create_namespace("")
 				local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
 
 				for i, item in ipairs(items) do
-					local row = i - 1 -- 0-based
-
 					local prefix_len = lines[i]:len() - item.text:len()
-					local col = prefix_len + item.path:len() + 1
-					if item.path_old ~= nil then
-						col = col + item.path_old:len() + 4
-					end
-					local col_end = prefix_len + item.text:len() -- 0-based and exclusive
+					local status_len = 2
+
+					local row = i - 1 -- 0-based
+					local col = prefix_len
+					local col_end = prefix_len + status_len -- 0-based and exclusive
 
 					local highlight_group = nil
 					if
-						item.git_status_tag == "[M]"
-						or item.git_status_tag == "[MM]"
-						or item.git_status_tag == "[R]"
-					then
-						highlight_group = "DiagnosticWarn"
-					end
-					if
-						item.git_status_tag == "[??]"
-						or item.git_status_tag == "[A]"
+						item.git_status_tag == "A"
+						or item.git_status_tag == "M"
+						or item.git_status_tag == "D"
+						or item.git_status_tag == "R"
 					then
 						highlight_group = "DiagnosticOk"
-					end
-					if item.git_status_tag == "[D]" then
+					elseif
+						item.git_status_tag == "??"
+						or item.git_status_tag == " D"
+						or item.git_status_tag == " M"
+					then
 						highlight_group = "DiagnosticError"
+					elseif
+						item.git_status_tag == "AM"
+						or item.git_status_tag == "MM"
+					then
+						highlight_group = "DiagnosticMixed"
 					end
 
-					vim.api.nvim_buf_set_extmark(buf_id, ns_id, row, col, {
-						hl_mode = "replace",
-						priority = 200,
-						hl_group = highlight_group,
-						end_row = row,
-						end_col = col_end,
-					})
+					if highlight_group == "DiagnosticMixed" then
+						vim.api.nvim_buf_set_extmark(buf_id, ns_id, row, col, {
+							hl_mode = "replace",
+							priority = 200,
+							hl_group = "DiagnosticOk",
+							end_row = row,
+							end_col = col_end - 1,
+						})
+						vim.api.nvim_buf_set_extmark(
+							buf_id,
+							ns_id,
+							row,
+							col + 1,
+							{
+								hl_mode = "replace",
+								priority = 200,
+								hl_group = "DiagnosticError",
+								end_row = row,
+								end_col = col_end,
+							}
+						)
+					else
+						vim.api.nvim_buf_set_extmark(buf_id, ns_id, row, col, {
+							hl_mode = "replace",
+							priority = 200,
+							hl_group = highlight_group,
+							end_row = row,
+							end_col = col_end,
+						})
+					end
 				end
 			end
 
@@ -186,6 +209,88 @@ mod.setup = function()
 				source = {
 					name = "files_git_changes",
 					show = custom_show,
+					preview = function(buf, item, opts)
+						local lines = vim.split(
+							vim.system({ "git", "diff", item.path })
+								:wait().stdout,
+							"\n"
+						)
+						vim.api.nvim_set_option_value(
+							"filetype",
+							"diff",
+							{ buf = buf }
+						)
+						vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+					end,
+				},
+				mappings = {
+					stage = {
+						char = "<C-i>",
+						func = function()
+							local matches = mini_pick.get_picker_matches()
+							local current_index =
+								vim.tbl_get(matches, "current_ind")
+
+							vim.notify("Current index: " .. current_index)
+
+							local path = vim.tbl_get(matches, "current", "path")
+							vim.system({ "git", "add", path }):wait()
+
+							mini_pick.set_picker_items_from_cli(
+								{ "git", "status", "--short" },
+								{ postprocess = parse_command_output }
+							)
+							mini_pick.set_picker_match_inds(
+								{ current_index },
+								"current"
+							)
+
+							vim.notify(
+								vim.inspect(
+									vim.tbl_get(
+										mini_pick.get_picker_matches(),
+										"current_ind"
+									)
+								)
+							)
+						end,
+					},
+					unstage = {
+						char = "<C-o>",
+						func = function()
+							local matches = mini_pick.get_picker_matches()
+							local current_index =
+								vim.tbl_get(matches, "current_ind")
+							local item = vim.tbl_get(matches, "current")
+
+							local path = vim.tbl_get(item, "path")
+							local path_old = vim.tbl_get(item, "path_old")
+
+							vim.system({
+								"git",
+								"restore",
+								"--staged",
+								path,
+							}):wait()
+							if path_old ~= nil and #path_old > 0 then
+								vim.system({
+									"git",
+									"restore",
+									"--staged",
+									path_old,
+								}):wait()
+							end
+
+							mini_pick.set_picker_items_from_cli(
+								{ "git", "status", "--short" },
+								{ postprocess = parse_command_output }
+							)
+							mini_pick.set_picker_match_inds(
+								{ current_index },
+								"current"
+							)
+						end,
+					},
 				},
 			})
 		end
