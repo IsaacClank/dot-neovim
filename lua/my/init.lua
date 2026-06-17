@@ -24,6 +24,7 @@ function mod.setup()
 	end
 
 	require("my.core.ui").setup()
+	require("my.core.picker").setup()
 	require("my.core.options").setup()
 	require("my.core.editing").setup()
 	require("my.core.pack").setup()
