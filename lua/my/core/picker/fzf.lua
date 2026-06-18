@@ -13,16 +13,28 @@ mod.setup = function()
 			fzf_opts = {
 				["--tabstop"] = 4,
 			},
+			winopts = {
+				preview = {
+					horizontal = "right:45%",
+				},
+			},
 		})
 
-		fzf.files_config = function(opts)
+		fzf.nvim_config = function(opts)
+			opts = opts or {}
+			fzf.files({
+				cwd = vim.fs.dirname(vim.env.MYVIMRC),
+				fd_opts = fzf_config.defaults.files.fd_opts
+					.. [[ --glob '*.lua' ]],
+			})
+		end
+
+		fzf.nvim_packs = function(opts)
 			opts = opts or {}
 			fzf.files({
 				cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "site", "pack"),
 				fd_opts = fzf_config.defaults.files.fd_opts
-					.. [[ --full-path --glob **/{plugin,lua}/**/*.lua ]],
-				rg_opts = fzf_config.defaults.files.rg_opts
-					.. [[ --glob=**/{plugin,lua}/**/*.lua ]],
+					.. [[ --full-path --glob '**/{plugin,lua}/**/*.lua' ]],
 			})
 		end
 	end)
