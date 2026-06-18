@@ -44,46 +44,13 @@ end
 local function setup_themes()
 	vim.pack.add({
 		"https://github.com/ellisonleao/gruvbox.nvim",
+		"https://github.com/sainnhe/gruvbox-material",
 		"https://github.com/mofiqul/dracula.nvim",
 		"https://github.com/olimorris/onedarkpro.nvim",
 		"https://github.com/shaunsingh/nord.nvim",
 	})
 
-	_G.themes = {
-		"default",
-		"dracula",
-		"gruvbox",
-		"nord",
-		"onedark",
-	}
-
-	vim.schedule(function()
-		local mini_pick = require("mini.pick")
-		mini_pick.registry.colorschemes = function()
-			local original_theme = vim.g.colors_name
-
-			local result = mini_pick.start({
-				source = {
-					name = "themes",
-					items = _G.themes,
-					preview = function(buf, theme)
-						vim.cmd.colorscheme(theme)
-
-						local lines = vim.tbl_keys(vim.api.nvim_get_hl(0, {}))
-						table.sort(lines)
-						vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-					end,
-					choose = function(theme)
-						vim.cmd.colorscheme(theme)
-					end,
-				},
-			})
-
-			if result == nil then
-				vim.cmd.colorscheme(original_theme)
-			end
-		end
-	end)
+	vim.cmd([[colorscheme gruvbox-material]])
 end
 
 local mod = {}
