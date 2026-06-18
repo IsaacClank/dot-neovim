@@ -10,6 +10,9 @@ mod.setup = function()
 
 		fzf.setup({
 			file_icon_padding = " ",
+			fzf_opts = {
+				["--tabstop"] = 4,
+			},
 		})
 
 		fzf.files_config = function(opts)
