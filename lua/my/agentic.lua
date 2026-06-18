@@ -9,12 +9,14 @@ mod.setup = function()
 		float_opts = {
 			title_pos = "center",
 			row = 0,
-			col = 0,
+			col = function()
+				return vim.o.columns
+			end,
 			width = function()
 				return math.floor(vim.o.columns * 0.33)
 			end,
 			height = function()
-				return math.floor(vim.o.lines * 0.90)
+				return math.floor(vim.o.lines * 0.95)
 			end,
 			winblend = 5,
 		},
