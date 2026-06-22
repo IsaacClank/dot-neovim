@@ -51,6 +51,9 @@ local function setup_themes()
 	})
 
 	vim.cmd([[colorscheme gruvbox-material]])
+	vim.schedule(function()
+		vim.cmd([[colorscheme gruvbox-material]])
+	end)
 end
 
 local mod = {}
