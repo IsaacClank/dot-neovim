@@ -10,7 +10,6 @@ function mod.setup()
 			border = "curved",
 			height = 30,
 			width = math.floor(vim.o.columns * 0.45),
-			winblend = 10,
 		},
 		on_open = function(term)
 			if term.hidden then

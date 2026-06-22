@@ -18,7 +18,6 @@ mod.setup = function()
 			height = function()
 				return math.floor(vim.o.lines * 0.95)
 			end,
-			winblend = 5,
 		},
 	})
 
