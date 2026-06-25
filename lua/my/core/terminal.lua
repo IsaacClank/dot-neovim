@@ -8,9 +8,11 @@ function mod.setup()
 		direction = "float",
 		float_opts = {
 			border = "curved",
-			height = 30,
-			width = math.floor(vim.o.columns * 0.45),
+			height = math.floor(vim.o.lines * 0.40),
+			width = math.floor(vim.o.columns * 0.70),
+			row = vim.o.lines - math.floor(vim.o.lines * 0.4) - 4,
 		},
+		open_mapping = [[<c-t>]],
 		on_open = function(term)
 			if term.hidden then
 				return
