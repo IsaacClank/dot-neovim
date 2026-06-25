@@ -63,6 +63,19 @@ local setup_lsp__ts_ls = function()
 	vim.lsp.enable("ts_ls")
 end
 
+local setup_lsp__fish_ls = function()
+	vim.lsp.config("fish_lsp", {
+		cmd = {
+			"fish-lsp",
+			"start",
+			"--disable",
+			"formatting",
+			"formatRange",
+		},
+	})
+	vim.lsp.enable("fish_lsp")
+end
+
 local mod = {}
 mod.setup = function()
 	vim.pack.add({
@@ -74,6 +87,7 @@ mod.setup = function()
 
 	vim.schedule(function()
 		setup_lsp__denols()
+		setup_lsp__fish_ls()
 		setup_lsp__jsonls()
 		setup_lsp__lua_ls()
 		setup_lsp__rust_analyzer()
