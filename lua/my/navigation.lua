@@ -36,9 +36,17 @@ mod.setup = function()
 		end, { desc = "Symbols" })
 
 		vim.keymap.set("n", "<Leader>sS", function()
-			fzf.lsp_workspace_symbols()
+			fzf.lsp_live_workspace_symbols()
 			-- mpick.lsp({ scope = "workspace_symbol_live" })
 		end, { desc = "Symbols (workspace)" })
+
+		vim.keymap.set(
+			"n",
+			"<Leader>la",
+			-- vim.lsp.buf.code_action,
+			fzf.lsp_code_actions,
+			{ desc = "Code Action" }
+		)
 	end)
 end
 return mod

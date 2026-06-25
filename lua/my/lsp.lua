@@ -79,13 +79,6 @@ mod.setup = function()
 		setup_lsp__rust_analyzer()
 		setup_lsp__ts_ls()
 
-		vim.keymap.set(
-			"n",
-			"<Leader>la",
-			vim.lsp.buf.code_action,
-			{ desc = "Code Action" }
-		)
-
 		vim.keymap.set("n", "<Leader>lk", vim.lsp.buf.hover, { desc = "Hover" })
 		vim.keymap.set(
 			"n",
