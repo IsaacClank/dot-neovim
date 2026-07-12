@@ -24,9 +24,6 @@ local mod = {}
 mod.setup = function()
 	vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 	require("lualine").setup({
-		options = {
-			globalstatus = true,
-		},
 		sections = {
 			lualine_a = {
 				{ "mode", cond = conditionals.buf_not_readonly },
