@@ -44,15 +44,14 @@ end
 local function setup_themes()
 	vim.pack.add({
 		"https://github.com/ellisonleao/gruvbox.nvim",
-		"https://github.com/sainnhe/gruvbox-material",
 		"https://github.com/mofiqul/dracula.nvim",
 		"https://github.com/olimorris/onedarkpro.nvim",
 		"https://github.com/shaunsingh/nord.nvim",
 	})
 
-	vim.cmd([[colorscheme gruvbox-material]])
+	vim.cmd([[colorscheme nord]])
 	vim.schedule(function()
-		vim.cmd([[colorscheme gruvbox-material]])
+		vim.cmd([[colorscheme nord]])
 	end)
 end
 
