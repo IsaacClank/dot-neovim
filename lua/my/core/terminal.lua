@@ -1,5 +1,48 @@
 local mod = {}
 
+function mod.resizable_terminal(opts)
+	opts = opts or {}
+
+	local toggleterm = require("toggleterm.terminal")
+	local default_float_opts = {
+		title_pos = "center",
+		row = 2,
+		col = function()
+			return vim.o.columns
+		end,
+		width = function()
+			return math.floor(vim.o.columns * 0.35)
+		end,
+		height = function()
+			return math.floor(vim.o.lines * 0.9)
+		end,
+	}
+
+	return toggleterm.Terminal:new({
+		display_name = opts.display_name or "",
+		cmd = opts.cmd or nil,
+		hidden = true,
+		direction = "float",
+		close_on_exit = true,
+		float_opts = default_float_opts,
+		on_close = function(term)
+			local win_config = vim.api.nvim_win_get_config(term.window)
+			local row, col, width, height =
+				win_config.row,
+				win_config.col,
+				win_config.width,
+				win_config.height
+
+			term.float_opts = vim.tbl_extend("force", default_float_opts, {
+				row = row,
+				col = col,
+				width = width,
+				height = height,
+			})
+		end,
+	})
+end
+
 function mod.setup()
 	vim.pack.add({ "https://github.com/akinsho/toggleterm.nvim" })
 	local toggleterm = require("toggleterm")
