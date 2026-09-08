@@ -42,6 +42,10 @@
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
+    "markdown-preview.nvim": {
+      "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
+      "src": "https://github.com/iamcco/markdown-preview.nvim"
+    },
     "mini.basics": {
       "rev": "3aea491e3f6aee05d37f69b8b0a41121370a0954",
       "src": "https://github.com/nvim-mini/mini.basics"

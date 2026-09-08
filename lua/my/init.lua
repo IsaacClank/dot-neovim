@@ -29,6 +29,7 @@ function mod.setup()
 	require("my.core.editing").setup()
 	require("my.core.pack").setup()
 	require("my.core.terminal").setup()
+	require("my.core.markdown").setup()
 
 	require("my.statusline").setup()
 	require("my.explorer").setup()
