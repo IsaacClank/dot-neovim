@@ -1,7 +1,7 @@
 {
   "plugins": {
     "blink-ripgrep.nvim": {
-      "rev": "bc6e9d6d079d6c82c96ae0052443448f005e00ad",
+      "rev": "a26a3dd6fc57d25a3bc082059941f4a96d3178e3",
       "src": "https://github.com/mikavilpas/blink-ripgrep.nvim"
     },
     "blink.cmp": {
@@ -19,11 +19,11 @@
       "src": "https://github.com/mofiqul/dracula.nvim"
     },
     "friendly-snippets": {
-      "rev": "bb548e5ae4550a5e318b7e398a93b9af456b65e1",
+      "rev": "b4d01b0fdf3c9a549961c2f9ffe8dc09be166219",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "05e44d38de0a79c11fba5f7bf8138791b1dbdd1e",
+      "rev": "13bb178a299f7493dd64427a58e61904c4b58ecb",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gruvbox-material": {
@@ -35,11 +35,11 @@
       "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
     "lazygit.nvim": {
-      "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
+      "rev": "9ffc6103926718f7070fb4017694543cd7dc9718",
       "src": "https://github.com/kdheepak/lazygit.nvim"
     },
     "leap.nvim": {
-      "rev": "38af0ab56c6eb8757ee6006dd13ab79c2bc11a49",
+      "rev": "32bde2e932417e8a065f039f00f0cebdd0da4710",
       "src": "https://codeberg.org/andyg/leap.nvim"
     },
     "lualine.nvim": {
@@ -105,7 +105,7 @@
       "version": "1.17.0 - 2.0.0"
     },
     "nvim-treesitter": {
-      "rev": "5cb0114e6242625db56dd6440e945ed1ece10bc7",
+      "rev": "f603a2f4da48728f80257fb5fbb90145fd1dc173",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-textobjects": {
@@ -113,11 +113,11 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "nvim-web-devicons": {
-      "rev": "5f032a85be210cd1c6ac98861eb3b187ff3bd5eb",
+      "rev": "58447c1fca354bbf184425e4a8d01deecbd6f3c4",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "onedarkpro.nvim": {
-      "rev": "ef009ae60769935a4eced9b3d545ae6013d3d271",
+      "rev": "24c806cb85c1f84d9faaff457cf7aa87c685a070",
       "src": "https://github.com/olimorris/onedarkpro.nvim"
     },
     "plenary.nvim": {
