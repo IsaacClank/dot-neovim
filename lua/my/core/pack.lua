@@ -1,6 +1,24 @@
 local mod = {}
 
 function mod.setup()
+	vim.api.nvim_create_user_command("PackInfo", function(args)
+		vim.print(
+			vim.inspect(
+				vim.pack.get(
+					vim.tbl_count(args.fargs) > 0 and args.fargs or nil
+				)
+			)
+		)
+	end, {
+		desc = "Get plugin info",
+		nargs = "*",
+		complete = function()
+			return vim.tbl_map(function(pack)
+				return vim.tbl_get(pack, "spec", "name")
+			end, vim.pack.get())
+		end,
+	})
+
 	vim.api.nvim_create_user_command("PackUpdate", function(args)
 		vim.pack.update(vim.tbl_count(args.fargs) > 0 and args.fargs or nil)
 	end, {
