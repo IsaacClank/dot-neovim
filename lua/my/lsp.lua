@@ -2,6 +2,10 @@ local setup_lsp__denols = function()
 	vim.lsp.enable("denols")
 end
 
+local setup_lsp__gopls = function()
+	vim.lsp.enable("gopls")
+end
+
 local setup_lsp__jsonls = function()
 	vim.lsp.enable("jsonls")
 end
@@ -88,6 +92,7 @@ mod.setup = function()
 	vim.schedule(function()
 		setup_lsp__denols()
 		setup_lsp__fish_ls()
+		setup_lsp__gopls()
 		setup_lsp__jsonls()
 		setup_lsp__lua_ls()
 		setup_lsp__rust_analyzer()
